@@ -1,0 +1,44 @@
+/*Description
+文本文件内容如下所示，编程输出所有整数
+
+126\r\n
+5\r\n
+…（都有\r\n）
+32
+请编程读出文件中所有整数。
+
+Input
+文件名
+tput
+文件中所有整数，整数之间用空格分隔
+Sample Input
+infile1.dic
+Sample Output
+126 5 ...*/
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{	
+	FILE* fp;
+	char ch;
+    char a[]={0};
+    scanf("%s",a);
+    fp=(fopen(a,"r+"));
+	if(fp==NULL)
+	{
+		printf("打开失败\n");
+		exit(1);
+	}
+	ch=fgetc(fp);
+    while(EOF!=ch)
+	{
+        
+		if(ch!='\n')
+			printf("%c",ch);
+		else
+			printf(" ");
+		ch=fgetc(fp);
+    }
+    fclose (fp);
+    return 0;
+}

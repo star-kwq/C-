@@ -1,0 +1,212 @@
+/*Description
+写一个被调函数，它可以对主函数中的两个变量做如下操作。
+
+
+
+（1）将大数的一半给小数，如12和4，操作后两个数分别是6和10.
+
+
+
+（2）将新的大数的一半给小数，比如上面的6和10，操作后变为11和5.
+
+
+Input
+Output
+Sample Input
+12 4
+Sample Output
+6 10
+11 5*/
+#include<stdio.h>
+void f(int *,int *);
+int main()
+{
+	int n,m;
+	scanf("%d %d",&n,&m);
+	f(&n,&m);
+	printf("%d %d\n",n,m);
+	f(&n,&m);
+	printf("%d %d\n",n,m);
+	return 0;
+}
+void f(int *n,int *m)
+{
+	if(*n<*m)
+	{
+		*m=*m/2.;
+		*n=*n+*m;
+	}
+	else if(*m<*n)
+	{
+		*n=*n/2.;
+		*m=*m+*n;
+	}
+}
+------------------------------------------------------------------------------------------------------------
+/*Description
+在主函数中输入一个整数，由被调函数（不返回值）使之变为绝对值，然后主函数输出它。要求：输入输出都由主函数完成
+
+
+Input
+Output
+Sample Input
+-5
+Sample Output
+5*/
+#include<stdio.h>
+void f(int *);
+int main()
+{
+	int n;
+	scanf("%d",&n);
+	f(&n);
+	printf("%d",n);
+	return 0;
+}
+void f(int *n)
+{
+	if(*n<0)
+		*n=-*n;
+}
+
+------------------------------------------------------------------------------------------------------------
+/*Description
+编写一个函数，该函数可以交换主函数中两个字符变量的值.请在横线位置填上相应代码。
+
+
+
+#include <stdio.h>
+
+                                    \\函数声明
+
+int main()
+
+{
+
+     char a,b;
+
+     scanf("%c %c",&a,&b);
+
+                                          \\函数调用
+
+     printf("%c %c\n",a,b);
+
+     return 0;
+
+}
+
+                                       \\函数头
+
+ {
+
+                                   \\函数体
+
+ }
+
+
+Input
+Output
+Sample Input
+a h
+Sample Output
+h a*/
+#include <stdio.h>
+void f(char *,char *);
+int main()
+{
+     char a,b;
+     scanf("%c %c",&a,&b);
+     f(&a,&b);
+     printf("%c %c\n",a,b);
+     return 0;
+}
+void f(char *a,char *b) 
+{
+   char c;
+   c=*a;
+   *a=*b;
+   *b=c;
+}
+------------------------------------------------------------------------------------------------------------
+/*Description
+从键盘输入4个整数，由一个被调函数找出最大值和最小值并且存入主函数定义的变量max和min中，最后由主函数输出这两个值。
+
+
+Input
+Output
+Sample Input
+6 8 2 5
+Sample Output
+8 2*/
+#include <stdio.h>
+void f(int,int,int,int,int *,int *);
+int main()
+{
+     int a,b,c,d,max,min;
+     scanf("%d %d %d %d",&a,&b,&c,&d);
+     f(a,b,c,d,&max,&min);
+     printf("%d %d\n",max,min);
+     return 0;
+}
+void f(int a,int b,int c,int d,int *max,int *min)
+{
+   *max=*min=a;
+   if(b>*max)
+	   *max=b;
+   if(b<*min)
+	   *min=b;
+   if(c>*max)
+	   *max=c;
+   if(c<*min)
+	   *min=c;
+   if(d>*max)
+	   *max=d;
+   if(d<*min)
+	   *min=d;
+}
+------------------------------------------------------------------------------------------------------------
+/*Description
+主函数中定义了4个整型变量a、b、m、n，其中a、b用来存储键盘输入的两个正整数，
+m、n分别用来存储a、b的最大公约数和最小公倍数，但是主函数只负责输入数据和输出结果，
+求最大公约数和最小公倍数的任务需要另外一个函数去完成，请编写这个被调函数。说明：只有一个被调函数。
+Input
+Output
+Sample Input
+3 9
+Sample Output
+3 9*/
+#include <stdio.h>
+void f(int,int,int *,int *);
+int main()
+{
+     int a,b,m,n;
+     scanf("%d %d",&a,&b);
+     f(a,b,&m,&n);
+     printf("%d %d\n",m,n);
+     return 0;
+}
+void f(int a,int b,int *m,int *n)
+{
+	int k,i;
+   for(i=1;;i++)
+   {
+	   if(i%a==0&&i%b==0)
+		   break;
+   }
+   *n=i;
+   if(a<b)
+	{
+		int t;
+		t=a;
+		a=b;
+		b=t;
+	}
+	for(k=a%b;k!=0;k=a%b)
+	{
+		a=b;
+		b=k;	
+	}
+	*m=b;
+}
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------

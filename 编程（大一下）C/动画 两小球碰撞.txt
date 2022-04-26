@@ -1,0 +1,55 @@
+#include <graphics.h>
+#include <dos.h>
+
+#include <stdlib.h>
+int main()
+{
+	int x,y,z,drive=DETECT, mode;
+	unsigned int m;
+	void *p;
+	initgraph(&drive,&mode,"D:\\TC\\TC\\DISK_C\\TC20");
+	cleardevice();
+	setfillstyle(1,5);
+	setcolor(1);
+	circle(440,240,30);
+	floodfill(440,240,1);
+	m=imagesize(410,210,470,270);
+	p=malloc(m);
+	if(p==NULL)
+	{
+		closegraph();
+		return 0;
+	}
+	getimage(410,210,470,270,p);
+		cleardevice();
+	do
+	{for(z=2;z<=50;z++)
+		{
+			if(z%2==0)
+			{
+				for(x=1,y=57;x<=26&&y>=32;x++,y--)
+				{
+					cleardevice();
+					putimage(y*10,210,p,COPY_PUT);
+					putimage(x*10,210,p,COPY_PUT);
+					
+					delay(100);
+				}
+			}
+			if(z%2==1)
+			{
+				for(x=26,y=32;x>=1&&y<=57;x--,y++)
+				{
+					cleardevice();
+					putimage(y*10,210,p,COPY_PUT);
+					putimage(x*10,210,p,COPY_PUT);
+			
+					delay(100);
+				}
+			}
+		}
+	}while(!kbhit());
+	free(p);
+	closegraph();
+	return 0;
+}

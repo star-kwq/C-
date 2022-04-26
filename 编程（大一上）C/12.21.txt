@@ -1,0 +1,104 @@
+/*Description
+每个学生都有姓名、英语、数学和语文3科考试成绩共4个数据，从键盘输入10个人的数据，
+由被调函数计算每科平均分，并找出语文成绩最高分的人和分数。（分数及平均分都为整数）
+
+Input
+键盘输入10个人的数据
+
+Output
+输出每科平均分及语文最高分的人和分数
+
+Sample Input
+aa 50 52 52
+bb 60 48 57
+cc 75 59 100
+dd 65 31 71
+ee 96 99 99
+ff 84 18 18
+gg 90 43 43
+ab 97 98 98
+ac 63 72 72
+ad 50 70 70
+
+Sample Output
+73 59 68 
+cc,75,59,100*/
+#include<stdio.h>
+struct ren 
+{ 
+	char n[9]; 
+	int yy;
+	int s;
+	int y;
+};
+void f(struct ren *,int*,int*,int*,int*);
+int main()   
+{   
+	struct ren r[10];
+	int i,yp,sp,yyp,k;
+	for(i=0;i<=9;i++)
+	{
+		scanf("%s %d %d %d",r[i].n,&r[i].yy,&r[i].s,&r[i].y);
+	}
+	f(r,&yyp,&sp,&yp,&k);
+	printf("%d %d %d \n",yyp,sp,yp);
+	printf ( "%s,%d,%d,%d\n",r[k].n,r[k].yy,r[k].s,r[k].y);
+    return 0;   
+}
+void f(struct ren *p,int *yyp,int *sp,int *yp,int *k)
+{
+	int yh=0,sh=0,yyh=0,i;
+	*k=0;
+	for(i=1;i<=9;i++)
+	{
+		if(p[i].y>p[*k].y)
+			*k=i;
+	}
+	for(i=0;i<=9;i++)
+	{
+		yyh+=p[i].yy;
+		sh+=p[i].s;
+		yh+=p[i].y;
+	}
+	*yyp=yyh/10;
+	*sp=sh/10;
+	*yp=yh/10;
+}
+--------------------------------------------------
+#include<stdio.h>
+struct ren 
+{ 
+	char n[9]; 
+	int yy,s,y;
+};
+int f(struct ren *,int*,int*,int*);
+int main()   
+{   
+	struct ren r[10];
+	int i,yp,sp,yyp,k;
+	for(i=0;i<=9;i++)
+		scanf("%s %d %d %d",r[i].n,&r[i].yy,&r[i].s,&r[i].y);
+	k=f(r,&yyp,&sp,&yp);
+	printf("%d %d %d \n",yyp,sp,yp);
+	printf ( "%s,%d,%d,%d",r[k].n,r[k].yy,r[k].s,r[k].y);
+    return 0;   
+}
+int f(struct ren *p,int *yyp,int *sp,int *yp)
+{
+	int yh=0,sh=0,yyh=0,i,k=0;
+	for(i=1;i<=9;i++)
+	{
+		if(p[i].y>p[k].y)
+			k=i;
+	}
+	for(i=0;i<=9;i++)
+	{
+		yyh+=p[i].yy;
+		sh+=p[i].s;
+		yh+=p[i].y;
+	}
+	*yyp=yyh/10;
+	*sp=sh/10;
+	*yp=yh/10;
+	return k;
+}

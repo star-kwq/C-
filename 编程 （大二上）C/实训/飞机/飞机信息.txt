@@ -1,0 +1,9 @@
+8
+8888 8:00->11:00 yantai->guiyang 1100 9 3
+7777 9:00->12:00 yantai->beijing 1300 9 2
+9999 15:00->16:00 yantai->chengdu 1600 7 9
+4444 12:20->14:30 yantai->binzhou 1500 86 6
+6666 20:50->18:20 yantai->taicang 2000 89 6
+1111 6:20->9:59 yantai->guangzhou 100 1 9
+5555 7:20->9:49 yantai->daliian 900 1 0
+2222 7:20->9:49 yantai->dongguan 1000 1 2

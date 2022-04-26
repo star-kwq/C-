@@ -1,0 +1,27 @@
+#include <graphics.h>
+#include <stdio.h>
+#include <math.h>
+int main()
+{
+	int drive=DETECT, mode;
+	int x,y;
+	initgraph(&drive,&mode,"D:\\TC\\TC\\DISK_C\\TC20");
+	settextstyle(2,0,5);
+	line(20,240,600,240);
+	line(600,240,590,235);
+	line(600,240,590,245);
+	outtextxy(600,230,"X");
+	line(320,20,320,460);
+	line(320,20,315,30);
+	line(320,20,325,30);
+	outtextxy(310,20,"Y");
+	outtextxy(310,245,"0");
+	for(x=95;x<=545;x++)
+	{
+		y=240-cos(2*3.1415/450*(x-320))*150;
+		putpixel(x,y,4);
+	}
+	getch();
+	closegraph();
+	return 0;
+}

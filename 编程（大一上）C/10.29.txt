@@ -1,0 +1,174 @@
+
+/*设乘坐火车时每个人可以免费携带20kg的行李，超出部分收费：
+若超出20kg但未超出40kg，则超出部分按2元/kg收费; 若超过40kg，
+20~40kg部分仍按2元/kg收费，但超过40kg的部分按5元/kg收费。编程计算应收金额。*/
+#include<stdio.h>
+int main()
+{
+	int a,b;
+	scanf("%d",&a);
+	if(a<=20)
+		b=0;
+	if(a>20&&a<=40)
+		b=(a-20)*2;
+	if(a>40)
+		b=(a-40)*5+20*2;
+	printf("%d\n",b);
+	return 0;
+}
+
+
+#include<stdio.h>
+int main()
+{
+    int x,y;
+    scanf("%d",&x);
+    switch(x/20){
+        case 0:
+            y=0;
+            break;
+        case 1:
+            y=(x-20)*2;
+            break;
+        default:
+            y=20*2+(x-40)*5;
+    }
+    printf("%d\n",y);
+    return 0;
+}
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+#include<stdio.h>/*通过键盘输入字符，若是小写字母变为相应大写字母，若是大写字母变为相应小写字母，否则不变。*/
+int main()
+{
+	char a;
+	scanf("%c",&a);
+	if(a>=65&&a<=90)
+		a=a+32;
+	else
+		if(a>=97&&a<=122)
+			a=a-32;
+		else
+			a=a;
+			
+		printf("%c\n",a);
+	return 0;
+}
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+#include<stdio.h>
+#include <math.h>/*键盘输入一元二次方程的三个系数，求其两个实根*/
+int main()
+{
+	int a,b,c,m;
+	float x1,x2;
+	scanf("%d%d%d",&a,&b,&c);
+	if(b*b-4*a*c>0)
+	{
+		m=sqrt(b*b-4*a*c); //此语句就是给整bai数n开平方根了。
+		x1=(-b+m)/2*a;
+		x2=(-b-m)/2*a;
+	}
+	if(b*b-4*a*c==0)
+	{
+		x2=(-b-m)/2*a;
+		x1=x2;
+	}
+	if(b*b-4*a*c<0)
+		;
+		printf("x1=%f,x2=%f\n",x1,x2);
+	return 0;
+}
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+输入两个整数，前者大则输出差和平方差，后者大则输出和及平方和
+
+
+#include<stdio.h>
+int main()
+{
+	int a,b,c,d;
+	scanf("%d%d",&a,&b);
+	if(a>b)
+	{
+		c=a-b;
+		d=a*a-b*b;
+	}
+	else
+	{
+		c=b+a;
+		d=a*a+b*b;
+	}
+		
+		printf("%d %d\n",c,d);
+	return 0;
+}
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+#include<stdio.h>/*从键盘上输入数字星期，然后输出它的英文: 其对应关系是 1 Monday 2 Tuesday 3 Wednesday 4 Thursday 5 Friday 6 Saturday 7 Sunday*/
+int main()
+{
+	int a;
+	scanf("%d",&a);
+	switch(a)
+	{
+	case 7: printf("Sunday\n");break;
+	case 6: printf("Saturday\n");break;
+	case 5: printf("Friday\n");break;
+	case 4: printf("Thursday\n");break;
+	case 3: printf("Wednesday\n");break;
+	case 2: printf("Tuesday\n");break;
+	case 1: printf("Monday\n");break;
+	
+	}
+	
+	return 0;
+}
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+通过键盘输入一个日期（年月日），计算该日期是这一年中的第几天
+
+
+#include<stdio.h>
+#include <math.h>
+int main()
+{
+	int y,m,d;
+	int s=0;
+	scanf("%d%d%d",&y,&m,&d);
+	switch(m){
+		case 12: s+=30;
+		case 11: s+=31;
+		case 10: s+=30;
+		case 9: s+=31;
+		case 8: s+=31;
+		case 7: s+=30;
+		case 6: s+=31;
+		case 5: s+=30;
+		case 4: s+=31;
+		case 3: s+=28;
+		case 2: s+=31;
+		case 1: s+=d;
+	
+	}
+	if((y%4==0&&y%100!=0||y%400==0)&&m>=3)
+		s++;
+	printf("%d\n",s);
+	return 0;
+}

@@ -1,0 +1,43 @@
+/*文件头结构的内容是二进制方式存储的，从键盘输如文件名字infile1.dic，
+打开相应的文件，求该数据库文件中总共有多少条记录，有多少个字段，每条记录有多少个字节。
+
+
+Input
+infile1.dic
+
+
+Output
+记录数
+
+
+
+字段数
+
+
+
+记录长度*/
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int main()
+{
+	FILE *fp;
+	long a;
+	short b,c;
+	char d[20]={0};
+	scanf("%s",d);
+	fp=fopen(d,"r");
+	if(fp==NULL)
+	{
+		printf("打开失败\n");
+		exit(1);
+	}
+	fseek(fp,4,0);
+	fread(&a,4,1,fp);
+	fread(&b,2,1,fp);
+	b=(b-32-1)/32;
+	fread(&c,2,1,fp);
+	fclose(fp);
+	printf("%ld\n%hd\n%hd\n",a,b,c);
+	return 0;
+}

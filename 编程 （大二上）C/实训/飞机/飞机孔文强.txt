@@ -1,0 +1,578 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define m 40
+#define n 100
+
+//********************************************************************************
+typedef struct
+{
+	int hangbanhao;//飞机
+   	char time[40];
+   	char city[20];
+   	int money;
+   	int zhekou;
+   	int kongyu;
+}planein;
+typedef struct
+{
+	planein Flight[m];
+   	int length;//几个
+}FlList;
+typedef struct
+{
+   	char name[20];//人
+   	char idcard[20];
+   	int hangbanhao;
+}Reserved;
+typedef struct 
+{
+	Reserved client[n];
+	int length;//几个
+}ReList;
+
+//********************************************************************
+int F_Read(FlList *L1)//读入数据
+{
+	int i,k=0;
+   	FILE *fp;
+   	if((fp=fopen("飞机信息.txt","r+"))==NULL)
+	{
+   		printf("文件打开失败!\n");
+   		exit(0);
+	}
+	fscanf(fp,"%d",&(L1->length));
+	for(i=0;i<L1->length;i++)
+	{
+		fscanf(fp,"%d %s %s",&(L1->Flight[i].hangbanhao),L1->Flight[i].time,L1->Flight[i].city);
+		fscanf(fp,"%d %d %d",&(L1->Flight[i].money),&(L1->Flight[i].zhekou),&(L1->Flight[i].kongyu));
+		k++;
+	}
+	fclose(fp);
+	if(i==k)
+		return 1;
+	else
+		return 0;
+}
+int R_Read(ReList *L2)
+{
+	FILE *fp;
+   	int k=0,i;
+   	if((fp=fopen("人员信息.txt","r+"))==NULL)
+	{
+   		printf("文件打开失败!\n");
+   		exit(0);
+   	}
+   	fscanf(fp,"%d",&(L2->length));
+   	for(i=0;i<L2->length;i++)
+	{
+   		fscanf(fp,"%s %s %d",L2->client[i].name,L2->client[i].idcard,&(L2->client[i].hangbanhao));
+		k++;
+	}
+   	fclose(fp);
+	if(i==k)
+		return 1;
+	else
+		return 0;
+}
+//********************************************************************************
+void  hangxian(FlList *L1)//查询所有航班信息
+{
+    int i;
+	printf(" 航班号        起降时间           起降城市          票价     票价折扣      空余座位数\n");
+	for(i=0;i<=L1->length-1;i++)
+	{
+		printf("%6d %18s %20s  %8d %8d %15d\n",L1->Flight[i].hangbanhao,L1->Flight[i].time,L1->Flight[i].city,L1->Flight[i].money,L1->Flight[i].zhekou,L1->Flight[i].kongyu);
+	}
+}
+void  rr(ReList *L2)//查询所人班信息
+{
+    int k;
+	printf("全部顾客信息如下：\n");
+	printf("姓名   证件号    预定航班号\n");
+	if(L2->length==0)
+		printf("无\n");
+	for(k=0;k<=L2->length-1;k++)
+	{
+		printf("%s      %s      %d\n",L2->client[k].name,L2->client[k].idcard,L2->client[k].hangbanhao);
+	}
+}
+void  lr(ReList *L2)//查询某个人班信息
+{
+    int k,w=0;
+	char u[20];
+	if(L2->length==0)
+	{
+		printf("目前没有人订票\n");
+		return;
+	}
+	printf("请输入证件号:");
+	scanf("%s",u);
+	for(k=0;k<=L2->length;k++)
+	{
+		if(strcmp(u,L2->client[k].idcard)==0)
+		{
+			printf("姓名   证件号    预定航班号\n");
+			printf("%s      %s      %d\n",L2->client[k].name,L2->client[k].idcard,L2->client[k].hangbanhao);
+			w=1;
+		}
+			
+	}
+	if(w!=1)
+	printf("这个人没有订票。\n");
+}
+//********************************************************************
+void FNsearch(FlList *L1)//查询某个航班信息
+{   int t,i;
+   	printf("输入航班号:");
+   	scanf("%d",&t);
+	for(i=0;i<L1->length;i++)
+   		if(L1->Flight[i].hangbanhao==t)
+			break;
+		if(i==L1->length) 
+			printf("该航班不存在!\n");
+		else
+		{
+			printf("航班信息:\n");
+			printf(" 航班号        起降时间           起降城市          票价     票价折扣      空余座位数\n");
+			printf("%6d %18s %20s  %8d %8d %15d\n",L1->Flight[i].hangbanhao,L1->Flight[i].time,L1->Flight[i].city,L1->Flight[i].money,L1->Flight[i].zhekou,L1->Flight[i].kongyu);
+		}
+}
+void FCsearch(FlList *L1)
+{
+	int i;
+   	char temp[20];
+   	printf("输入起降城市:");
+   	scanf("%s",temp);
+	for(i=0;i<L1->length;i++)
+		if(strcmp(L1->Flight[i].city,temp)==0) 
+		{
+			printf("航班信息:\n");
+			printf(" 航班号        起降时间           起降城市          票价     票价折扣      空余座位数\n");
+   	        printf("%6d %18s %20s  %8d %8d %15d\n",L1->Flight[i].hangbanhao,L1->Flight[i].time,L1->Flight[i].city,L1->Flight[i].money,L1->Flight[i].zhekou,L1->Flight[i].kongyu);
+   		}
+}
+
+void Fsearch(FlList *L1)
+{
+	int k;
+	printf("     ******************\n");
+    printf("     *1.按航班号查询  *\n");
+   	printf("     *2.按起降城市查询*\n");
+	printf("     ******************\n");
+	printf("****选择:");
+   	scanf("%d",&k);
+   	switch(k)
+   	{
+   	  case 1:
+		  FNsearch(L1);
+		  break;
+   	  case 2:
+		  FCsearch(L1);
+		  break;
+   	  default:
+		  printf("操作错误!\n");
+		  break;
+   	}
+}
+void Rsearch(ReList *L2)
+{
+	int i;
+   	char temp[20];
+   	if(L2->length==0) 
+	{
+   		printf("当前订票人数为0,无法查询!\n");
+   	    return;
+   	}
+   	printf("请输入客户身份证号:");
+   	scanf("%s",temp);
+   	for(i=0;i<L2->length;i++)
+   		if(strcmp(L2->client[i].idcard,temp)==0)
+			break;
+		if(i==L2->length) printf("不存在该客户!\n");
+		else
+		{
+			printf("该客户信息如下:\n");
+			printf("姓名：%s\n证件号：%s\n预定航班：%d\n",L2->client[i].name,L2->client[i].idcard,L2->client[i].hangbanhao);
+   	}
+}
+void Search(FlList *L1,ReList *L2)//1
+{
+	int k;
+	printf("     **************\n");
+    printf("     * 1.航班信息 *\n");
+   	printf("     * 2.订票信息 *\n");
+	printf("     **************\n");
+	printf("***选择:");
+   	scanf("%d",&k);
+   	if(k==1)
+		  Fsearch(L1);
+   	else if(k==2)
+		Rsearch(L2);
+   	else if(k!=1||k!=2)
+		  printf("操作错误!\n");
+		 
+}
+//********************************************************************************
+void Recommend(FlList *L1,int i)//订票
+{
+   	int k;
+   	printf("抱歉，该航班已无空余座位\n");
+   	for(k=0;k<L1->length;k++)
+   		if((strcmp(L1->Flight[i].city,L1->Flight[k].city)==0)&&(k!=i)&&(L1->Flight[k].kongyu!=0))
+   		{
+   			printf("您可选择该相似航班:\n");
+            printf("航班号：%d\n起降时间：%s\n起降城市：%s\n\t\t\t\t\t票价：%d\n票价折扣：%d\n空余座位数：%d\n",L1->Flight[k].hangbanhao,L1->Flight[k].time,L1->Flight[k].city,L1->Flight[k].money,L1->Flight[k].zhekou,L1->Flight[k].kongyu);
+   		}
+}
+void Pay(FlList *L1,ReList *L2,int i,int t)
+{
+   	FILE *fp1,*fp2;
+   	int k,j;
+   	printf("请输入客户信息\n");
+   	printf("姓名:");
+   	scanf("%s",L2->client[L2->length].name);
+   	printf("证件号:");
+    scanf(" %s",L2->client[L2->length].idcard);
+   	L2->client[L2->length].hangbanhao=L1->Flight[i].hangbanhao;
+	for(j=0;j<L2->length;j++)
+	{
+		if(strcmp(L2->client[L2->length].idcard,L2->client[j].idcard)==0&&t==L2->client[j].hangbanhao)
+		{
+				printf("一个人不能在不同航班同时顶张票。\n");
+				return;
+		}
+	}
+   	printf("您应支付票价%d元\n",L1->Flight[i].money*L1->Flight[i].zhekou/10);
+   	L1->Flight[i].kongyu--;
+   	L2->length++;
+	
+   	if((fp1=fopen("飞机信息.txt","w"))==NULL)
+   	{
+   		printf("文件打开失败!\n");
+   		exit(0);
+   	}
+   	fprintf(fp1,"%d\n",L1->length);
+
+       for(i=0;i<L1->length;i++)
+   	fprintf(fp1,"%d %s %s %d %d %d\n",L1->Flight[i].hangbanhao,L1->Flight[i].time,L1->Flight[i].city,L1->Flight[i].money,L1->Flight[i].zhekou,L1->Flight[i].kongyu);
+   	fclose(fp1);
+
+       if((fp2=fopen("人员信息.txt","w"))==NULL)
+   	{
+   		printf("文件打开失败!\n");
+   		exit(0);
+   	}
+   	fprintf(fp2,"%d\n",L2->length);
+	for(k=0;k<L2->length;k++)
+		fprintf(fp2,"%s %s %d\n",L2->client[k].name,L2->client[k].idcard,L2->client[k].hangbanhao);
+	fclose(fp2);
+   	fclose(fp2);
+   	printf("订票成功！\n");
+}
+void Reserve(FlList *L1,ReList *L2)
+{
+   	int i,t;
+   	printf("输入要订票的航班号:");
+    scanf("%d",&t);
+	for(i=0;i<L1->length;i++)
+	{
+   		if(L1->Flight[i].hangbanhao==t)
+			break;
+	}
+	if(i==L1->length) 
+	{
+   		printf("不存在该航班!\n");
+		return;
+	}
+	if(L1->Flight[i].kongyu==0) 
+		Recommend(L1,i);
+	else 
+		Pay(L1,L2,i,t);
+}
+//********************************************************************************
+void Withdraw(FlList *L1,ReList *L2)//退票
+{
+
+	FILE *fp1,*fp2;
+   	int k,i;
+   	char temp[20];
+   	if(L2->length==0)
+   	{
+   		printf("操作错误！\n");
+   		return;
+   	}
+   	printf("请输入客户证件号:");
+   	scanf("%s",temp);
+   	for(k=0;k<L2->length;k++)
+		if(strcmp(temp,L2->client[k].idcard)==0)
+			break;
+		if(k==L2->length)
+		{
+   		printf("该客户不存在！\n");
+   		return;
+		}
+		
+		for(i=0;i<L1->length;i++)
+			if(L2->client[k].hangbanhao==L1->Flight[i].hangbanhao)
+				break;
+			L1->Flight[i].kongyu++;
+			for(;k<L2->length-1;k++)
+				L2->client[k]=L2->client[k+1];
+			L2->length--;
+			if((fp1=fopen("飞机信息.txt","w"))==NULL)
+			{
+				printf("文件打开失败!\n");
+				exit(0);
+			}
+			
+			fprintf(fp1,"%d\n",L1->length);
+			for(i=0;i<L1->length;i++)
+				fprintf(fp1,"%d %s %s %d %d %d\n",L1->Flight[i].hangbanhao,L1->Flight[i].time,L1->Flight[i].city,L1->Flight[i].money,L1->Flight[i].zhekou,L1->Flight[i].kongyu);
+			fclose(fp1);
+			
+       if((fp2=fopen("人员信息.txt","w"))==NULL)
+   	{
+   		printf("文件打开失败!\n");
+   		exit(0);
+   	}
+	   
+	   fprintf(fp2,"%d\n",L2->length);
+	   for(k=0;k<L2->length;k++)
+		   fprintf(fp2,"%s %s %d\n",L2->client[k].name,L2->client[k].idcard,L2->client[k].hangbanhao);
+	   fclose(fp2);
+	   printf("退票成功！\n");
+}
+//********************************************************************************
+void Fadd(FlList *L1)//修改
+{
+	FILE *fp1;
+	int i,d;
+	printf("新增航班信息******\n");
+	printf("要增加的航班数:");
+	scanf("%d",&d);
+	for(i=0;i<d;i++)
+	{
+		printf("航班号:");
+		scanf("%d",&(L1->Flight[L1->length].hangbanhao));
+		printf("起降时间:");
+   		scanf(" %s",L1->Flight[L1->length].time);
+   		printf("起降城市:");
+   		scanf(" %s",L1->Flight[L1->length].city);
+   		printf("票价:");
+   		scanf("%d",&(L1->Flight[L1->length].money));
+   		printf("票价折扣:");
+   		scanf("%d",&(L1->Flight[L1->length].zhekou));
+   		printf("空余座位数:");
+   		scanf("%d",&(L1->Flight[L1->length].kongyu));
+   		L1->length++;
+		if((fp1=fopen("飞机信息.txt","w"))==NULL)
+   		{
+   			printf("文件打开失败!\n");
+   			exit(0);
+   		}
+   		fprintf(fp1,"%d\n",L1->length);
+		for(i=0;i<L1->length;i++)
+   		fprintf(fp1,"%d %s %s %d %d %d\n",L1->Flight[i].hangbanhao,L1->Flight[i].time,L1->Flight[i].city,L1->Flight[i].money,L1->Flight[i].zhekou,L1->Flight[i].kongyu);
+	}
+   	fclose(fp1);
+}
+void Fcan(FlList *L1)
+{   
+   	FILE *fp1;
+   	int i,t;
+   	printf("要取消航班的航班号:");
+   	scanf("%d",&t);
+	for(i=0;i<L1->length;i++)
+		if(L1->Flight[i].hangbanhao==t)
+			break;
+		if(i==L1->length) 
+		{
+   		printf("不存在该航班!\n");
+        return;
+   	}
+   	for(;i<L1->length-1;i++)
+   		L1->Flight[i]=L1->Flight[i+1];
+   	L1->length--;
+   	if((fp1=fopen("飞机信息.txt","w"))==NULL)
+   	{
+   		printf("文件打开失败!\n");
+   		exit(0);
+   	}
+   	fprintf(fp1,"%d\n",L1->length);
+    for(i=0;i<L1->length;i++)
+   	fprintf(fp1,"%d %s %s %d %d %d\n",L1->Flight[i].hangbanhao,L1->Flight[i].time,L1->Flight[i].city,L1->Flight[i].money,L1->Flight[i].zhekou,L1->Flight[i].kongyu);
+   	fclose(fp1);
+}
+void Fchg(FlList *L1)
+{
+   	FILE *fp1;
+   	int i,t,d;
+   	printf("要修改航班的航班号:");
+   	scanf("%d",&t);
+	for(i=0;i<L1->length;i++)
+		if(L1->Flight[i].hangbanhao==t)
+			break;
+		if(i==L1->length) 
+		{
+   		printf("不存在该航班!\n");
+        return;
+		}
+		printf("可修改选项*******\n1.起降时间\n2.票价\n3.折扣\n注:输入0结束修改\n");
+	while(1)
+	{
+		printf("选择:");
+		scanf("%d",&d);
+		if(d==1)
+		{
+			printf("新起降时间:");
+			scanf("%s",L1->Flight[i].time);
+		}
+		if(d==2)
+		{
+   			printf("新票价:");
+   			scanf("%d",&(L1->Flight[i].money));
+		}
+		if(d==3)
+		{
+   			printf("新票价折扣:\n");
+   			scanf("%d",&(L1->Flight[i].zhekou));
+		}
+		if(d==0)
+			break;
+	}
+		if((fp1=fopen("飞机信息.txt","w"))==NULL)
+		{
+   		printf("文件打开失败!\n");
+   		exit(0);
+		}
+		fprintf(fp1,"%d\n",L1->length);
+		for(i=0;i<L1->length;i++)
+   	    fprintf(fp1,"%d %s %s %d %d %d\n",L1->Flight[i].hangbanhao,L1->Flight[i].time,L1->Flight[i].city,L1->Flight[i].money,L1->Flight[i].zhekou,L1->Flight[i].kongyu);
+		fclose(fp1);
+}
+void Adjust(FlList *L1)
+{
+   	int k;
+	printf("************\n");
+   	printf("*1.增加航班*\n");
+   	printf("*2.取消航班*\n");
+    printf("*3.改动信息*\n");
+	printf("************\n");
+	printf("选择:");
+   	scanf("%d",&k);
+   	if(k==1)
+		  Fadd(L1);
+   	else if(k==2)
+		  Fcan(L1);
+   	else if(k==3)
+		  Fchg(L1);
+		 
+   	
+}
+//********************************************************************************
+void cd()
+{
+	printf("                        *****************************************************\n");
+    printf("                        *                    飞机订票系统                   *\n");
+    printf("                        *               1.查看菜单                          *\n");
+	printf("                        *               2.录入航班情况                      *\n");
+    printf("                        *               3.查询信息                          *\n");
+    printf("                        *               4.订票                              *\n");
+    printf("                        *               5.退票                              *\n");
+	printf("                        *               6.修改                              *\n");
+	printf("                        *               7.退出系统                          *\n");
+    printf("                        *****************************************************\n");
+    printf("                         注释：按（1——7）选择功能\n");
+	printf("                               录入航班情况是从文件中录入\n");
+	printf("                               飞机数据存在“飞机信息.txt”\n");
+	printf("                               人员数据存在“人员信息.txt”\n");
+	printf("                               选择权限1是管理员、2是乘客\n");
+}
+//********************************************************************************
+int main()
+{
+	int k,d,b;
+	FlList Flist;
+	ReList Rlist;
+	Flist.length=0;
+	Rlist.length=0;
+	cd();
+	printf("选择权限：");
+	scanf("%d",&b);
+	while(1)
+	{
+		printf("********************************************************************************************************************\n");
+		
+		printf("主功能：");
+   		scanf("%d",&k);
+		if(k==1)
+			cd();
+		else if(k==2)
+		{
+			if(F_Read(&Flist)==1&&R_Read(&Rlist)==1)
+				printf("录入成功\n");
+			else
+				printf("录入失败\n");
+		}
+   		else if(k==3)
+		{
+			printf("     ********************\n");
+			printf("     *1.查询所有航班信息*\n");
+			printf("     *2.查询某个航班信息*\n");
+			printf("     *3.查询所有人信息  *\n");
+			printf("     *4.查询某个人信息  *\n");
+			printf("     *5.返回主菜单      *\n");
+			printf("     *6.分菜单          *\n");
+			printf("     ********************\n");
+			printf("     注释：按（1—6）选择分功能\n");
+			while(1)
+			{
+				printf("**分功能：");
+				scanf("%d",&d);
+				if(d==2)
+					 Search(&Flist,&Rlist);//查询某个航班信息
+				else if(d==1)
+					 hangxian(&Flist);//查询所有航班信息
+				else if(d==3&&b==1)
+					 rr(&Rlist);//查询所有人信息
+				else if(d==3&&b==2)
+					 printf("需要管理员权限\n");
+				else if(d==4)
+					 lr(&Rlist);//查询所有人信息
+				else if(d==5)
+					break;
+				else if(d==6)
+				{
+					printf("     ********************\n");
+					printf("     *1.查询所有航班信息*\n");
+					printf("     *2.查询某个航班信息*\n");
+					printf("     *3.查询所有人信息  *\n");
+					printf("     *4.查询某个人信息  *\n");
+					printf("     *5.返回主菜单      *\n");
+					printf("     *6.分菜单          *\n");
+					printf("     ********************\n");
+					printf("     注释：按（1—6）选择分功能\n");
+				}
+				else
+					printf("没有该功能！请重新输入。\n");
+			}
+		}
+		else if(k==4)
+		{
+			  hangxian(&Flist);
+			  Reserve(&Flist,&Rlist);//订票
+		}
+		else if(k==5)
+			  Withdraw(&Flist,&Rlist);//退票
+		else if(k==6&&b==1)
+			  Adjust(&Flist);//修改
+		else if(k==6&&b==2)
+			  printf("需要管理员权限\n");	
+		else if(k==7)
+			break;
+		else
+					printf("没有该功能！请重新输入。\n");
+   	}
+	return 0;
+}

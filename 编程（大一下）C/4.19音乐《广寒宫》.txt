@@ -1,0 +1,44 @@
+#include<stdio.h>
+#include<dos.h>
+void wdg(unsigned int pl,int sj)
+{
+	int i;
+	union
+	{
+		int cspl;
+		char c[2];
+	}yfdpl;
+	char bits;
+	yfdpl.cspl=1193180/pl;
+	outportb(0x43,0xb6);
+	outportb(0x42,yfdpl.c[0]);
+	outportb(0x42,yfdpl.c[1]);
+	bits=inportb(0x61);
+	outportb(0x61,bits|3);
+	for(i=0; i<sj; i++)
+		delay (100);
+	outportb(0x61, bits&0xfc);
+	outportb(0x61,bits);
+}
+int main()
+{
+	int freq[8]={0,262,294,330,349,392,440,494};
+	int yj[]={-6,-7,1,2,3,5,6,5,3,2,1,2,3,3,-6,-7,1,2,3,5,6,5,3,2,1,2,3,-6,0};
+	int jf[]={8,8,8,8,8,16,16,8,8,8,8,8,8,2,8,8,8,8,8,16,16,8,8,8,8,8,8,2,0 };
+	unsigned int pl;
+	int sj,i;
+	for(i=0;yj[i];i++)
+	{
+		if(yj[i]<0)
+			pl=freq[-yj[i]]/2;
+		else
+			if(yj[i]>7)
+				pl=freq[yj[i]%7]*2;
+			else
+				pl= freq[yj[i]];
+		sj=16/jf[i];
+		wdg(pl,sj);
+	}
+
+	return 0;
+}

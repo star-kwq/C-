@@ -1,0 +1,58 @@
+/*Description
+输入10个整数,存入一维数组,统计输出其中正数、负数和零的个数
+Input
+Output
+Sample Input
+1 2 3 4 -1 -2 0 4 0 -1
+Sample Output
+5,3,2*/
+#include<stdio.h>
+int main()
+{
+	int k[10];
+	int i,a=0,b=0,c=0;
+	for(i=0;i<=9;i++)
+	{
+		scanf("%d",&k[i]);
+		if(k[i]>0)
+			a=a+1;
+		if(k[i]<0)
+			b=b+1;
+		if(k[i]==0)
+			c=c+1;
+	}
+	printf("%d,%d,%d\n",a,b,c);
+	return 0;
+}
+--------------------------------------------------------------------------------
+/*Description
+体操比赛有8个裁判打分，去掉最高、最低分各一个，
+求选手最终得分平均分。结果保留两位小数
+Input
+output
+Sample Input
+1.2 2.3 3 4 5 6 7 1
+Sample Output
+3.58
+*/
+#include<stdio.h>
+int main()
+{
+	float k[8],a,b,max,min;
+	int i;
+	scanf("%f",&k[0]);
+	a=max=min=k[0];
+	for(i=1;i<=7;i++)
+	{
+		scanf("%f",&k[i]);
+		a=a+k[i];
+		if(k[i]>max)
+			max=k[i];
+		if(k[i]<min)
+			min=k[i];
+	}
+	a=a-max-min;
+	b=a/6;
+	printf("%.2f\n",b);
+	return 0;
+}

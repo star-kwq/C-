@@ -1,0 +1,140 @@
+/*Description
+键盘输入一个short型整数，问：若把它当作是两个字符，则这两个字符各是什么？
+ 
+
+Input
+输入一个短整数
+ 
+
+Output
+输出两个字符，先输出低位字节的，再输出高位字节的
+
+Sample Input
+16706
+Sample Output
+B,A*/
+#include<stdio.h>
+union x
+{
+	short a;
+	char x[2];
+};
+int main()
+{
+	union x n;
+	scanf("%d",&n);
+	printf("%c,%c\n",n.x[0],n.x[1]);
+	return 0;
+}
+------------------------------------------------------------------------------------------
+/*Description
+键盘输入一个单精度实数，用八进制输出其在内存中的存储状态。
+例如：键盘输入12.36，12.36在内存中存储为4个字节，是如下的状态：01000001 01000101 11000010 10001111（这个存储状态是根据浮点数的存储标准----IEEE754标准计算出来的）
+
+分组（自右至左每三位一组）： 01 000 001 010 001 011 100 001 010 001 111
+
+所以八进制的输出结果是：10121341217
+
+提示：利用共用体，让实数与某种数据共享4个字节的内存，而那种数据是可以用八进制输出的
+ 
+
+Input
+输入一个单精度实数
+
+Output
+用八进制输出其在内存中的存储状态
+ 
+
+Sample Input
+12.36
+Sample Output
+10121341217*/
+#include<stdio.h>
+union x
+{
+	float a;
+	int b;
+};
+int main()
+{
+	union x n;
+	scanf("%f",&n.a);
+	printf("%o\n",n.b);
+	return 0;
+}
+------------------------------------------------------------------------------------------
+/*Description
+主函数如下：
+
+int main()
+
+{
+
+struct time a,b,c;
+
+scanf(“%d%d%d”,&a.h,&a.m,&a.s);
+
+scanf(“%d%d%d”,&b.h,&b.m,&b.s);
+
+sub(&a,&b,&c);
+
+printf(“%d:%d\’%d\”\n”,c.h,c.m,c.s);
+
+return 0;
+
+}
+
+主函数已在后台，您只需提交结构体定义以及sub函数的定义即可，系统会自动将主函数代码追加到您提交（修改）的代码之后。
+
+Input
+输入6个整数作为两个时间的小时、分钟、秒
+
+Output
+输出两个时间相加之后的总时间
+
+Sample Input
+1 35 40
+2 40 50
+Sample Output
+4:16'30"*/
+#include<stdio.h>
+struct time
+{
+	int h;
+	int m;
+	int s;
+};
+void sub(struct time *a,struct time *b,struct time *c)
+{
+	c->s=a->s+b->s;
+	c->h=a->h+b->h;
+	c->m=a->m+b->m;
+	if((*c).s>=60)
+	{
+		c->m+=1;
+		c->s=c->s-60;
+	}
+	if(c->m>=60)
+	{
+		c->h+=1;
+		c->m=c->m-60;
+	}	
+}
+int main()
+
+{
+
+	struct time a,b,c;
+
+	scanf("%d%d%d",&a.h,&a.m,&a.s);
+
+	scanf("%d%d%d",&b.h,&b.m,&b.s);
+
+	sub(&a,&b,&c);
+
+	printf("%d:%d\'%d\"\n",c.h,c.m,c.s);
+
+	return 0;
+
+}
+------------------------------------------------------------------------------------------

@@ -1,0 +1,128 @@
+/*Description
+从键盘输入10个整数，找出其中不重复的数，若没有，则输出NO。注意：最后一个数后也有一个空格。如果输出NO时后边没有空格
+
+Input
+Output
+Sample Input
+1 2 4 6 7 0 7 4 6 9
+0 0 0 0 0 0 0 0 0 0
+1 2 3 4 5 6 7 8 9 0 
+Sample Output
+1 2 0 9
+NO
+1 2 3 4 5 6 7 8 9 0*/
+#include<stdio.h>
+int main()
+{
+	int a[10],b[10];
+	int i,j,t=0;
+	for(i=0;i<=9;i++)
+	{
+		scanf("%d",&a[i]);
+		b[i]=a[i];
+	}
+	for(i=0;i<=9;i++)
+	{
+		for(j=0;j<=9;j++)
+		{
+			if(b[i]==a[j]&&i!=j)
+				break;
+		}
+		if(j==10)
+		{
+			printf("%d ",b[i]);
+			t=t+1;
+		}
+	}
+	if(t==0)
+		printf("NO\n");
+	else
+		printf("\n");	
+	return 0;
+}
+-------------------------------------------------------------------------------
+/*Description
+键盘输入10个数，然后再输入一个数m，问第m个元素（m最小为0最大为9）在数组中出现了几次？
+
+Input
+Output
+Sample Input
+1 5 3 2 6 3 9 5 3 2
+3
+Sample Output
+2*/
+#include<stdio.h>
+int main()
+{
+	int a[10],b[10];
+	int i,t=0,m;
+	for(i=0;i<=9;i++)
+	{
+		scanf("%d",&a[i]);
+		b[i]=a[i];
+	}
+	scanf("%d",&m);
+	for(i=0;i<=9;i++)
+	{
+		if(b[m]==a[i])
+			t=t+1;
+	}
+	printf("%d\n",t);	
+	return 0;
+}
+-------------------------------------------------------------------------------*
+/*Description
+定义数组a[10]，接收键盘输入的数，不管用户输入什么数，数组a只接收不重复的数（第一次出现的数），最终，a中存储的是10个不重复的整数。
+
+Input
+Output
+Sample Input
+1 1 2 3 4 5 6 6 5 7 8 9 10  
+Sample Output
+1 2 3 4 5 6 7 8 9 10*/
+#include<stdio.h>
+int main()
+{
+	int a[10];
+	int n=0,i,m;
+	do
+	{
+		scanf("%d",&a[n]);
+		m=0;
+		for(i=0;i<n;i++)
+			if(a[i]==a[n])
+			{
+				m=1;
+				break;
+			}
+		if(m==0)
+			n++;
+	}
+	while(n<=9);
+	for(i=0;i<=9;i++)
+		printf("%d ",a[i]);
+	return 0;
+}
+----------------------------
+#include<stdio.h>
+int main()
+{
+	int a[10];
+	int j,i,m;
+	for(j=0;j<=9;)
+	{
+		scanf("%d",&a[j]);
+		m=0;
+		for(i=0;i<j;i++)
+			if(a[i]==a[j])
+			{
+				m=1;
+				break;
+			}
+		if(m==0)
+			j++;
+	}
+	for(i=0;i<=9;i++)
+		printf("%d ",a[i]);
+	return 0;
+}

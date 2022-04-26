@@ -1,0 +1,218 @@
+#include<stdio.h>
+struct jg
+{
+    int ys;
+    struct jg *xyg;
+};
+typedef struct jg jgt;
+jgt * csh()//初始化
+{
+	jgt *head;
+    head=(jgt*)malloc(sizeof(jgt));
+	if(head==NULL)
+        printf("创建失败\n");
+	else
+	{
+		head->ys=0;
+		head->xyg=NULL;
+		return head;
+	}
+}
+
+ 
+void sr(jgt *head,int gs)//输入
+{
+    int i,j,h;
+    jgt *p,*p1;
+	p=head->xyg;
+	printf("请输入元素:\n");
+    for(i=0;i<gs;i++)
+    {
+        p=(jgt*)malloc(sizeof(jgt));
+		if(p==NULL)
+		  printf("输入失败\n");
+		else
+		{
+  			scanf("%d",&p->ys);
+			p1=head;
+			while(p1->xyg!=NULL)
+			{
+				p1=p1->xyg;
+			}
+			p1->xyg=p;
+			p->xyg=NULL;
+		}
+		
+    }
+	p=head->xyg;
+	if(p->xyg!=NULL)
+	{
+		for(i=0;i<100;i++)
+		{
+			p=head->xyg;
+			for(j=0;j<100;j++)
+			{
+				if(p->ys>p->xyg->ys)
+				{
+					 h=p->ys;
+					 p->ys=p->xyg->ys;
+					 p->xyg->ys=h;
+				}
+				p=p->xyg;
+				if(p->xyg==NULL)
+					break;
+			}
+		}
+	}
+}
+ 
+void hb(jgt *A,jgt *B)//合并
+{
+	jgt *p,*p1,*q;
+	int i,j,s=0,h,n=0;
+	q=B->xyg;
+	while(q->xyg!=NULL)
+	{
+		p1=A;
+		while(p1->xyg!=NULL)
+		{
+			p1=p1->xyg;
+			if(q->ys==p1->ys)
+				s++;
+		}
+		if(s==0)
+		{
+			p1->xyg=q;
+			q=q->xyg;
+			p1=p1->xyg;
+			p1->xyg=NULL;
+		}
+		else
+		{
+			s=0;
+			q=q->xyg;
+
+		}
+	}
+	p1=A;
+	while(p1->xyg!=NULL)
+	{
+		p1=p1->xyg;
+		if(q->ys==p1->ys)
+			s++;
+	}
+	if(s==0)
+	{
+		p1->xyg=q;
+		p1=p1->xyg;
+		p1->xyg=NULL;
+	}
+	p=A->xyg;
+	if(p->xyg!=NULL)
+	{
+		for(i=0;i<100;i++)
+		{
+			p=A->xyg;
+			for(j=0;j<100;j++)
+			{
+				if(p->ys>p->xyg->ys)
+				{
+					 h=p->ys;
+					 p->ys=p->xyg->ys;
+					 p->xyg->ys=h;
+				}
+				p=p->xyg;
+				if(p->xyg==NULL)
+					break;
+			}
+		}
+	}
+	free(B);
+}
+
+ 
+void sc(jgt *A)//输出
+{
+	jgt *p;
+	p=A->xyg;
+	printf("%d ",p->ys);
+	while(p->xyg!=NULL)
+	{
+		p=p->xyg;
+		printf("%d ",p->ys);
+	}
+	printf("\n");
+}
+ 
+ 
+int main()
+{
+    int a,b,s=0;
+    jgt  *A,*B;
+    printf("                        ************************************************\n");
+    printf("                        *                   合并集合                   *\n");
+    printf("                        *               1.建立链表A、B。               *\n");
+    printf("                        *               2.输入元素                     *\n");
+    printf("                        *               3.合并                         *\n");
+    printf("                        *               4.输出链表                     *\n");
+    printf("                        *               5.结束程序                     *\n");
+    printf("                        ************************************************\n");
+    printf("                         注释：按（1——5）选择功能\n");
+    while(1==1)
+    {
+        scanf("%d",&a);
+        if(a==1)
+        {
+            A=csh();
+			B=csh();
+            if(A!=NULL&&B!=NULL)
+			{
+                printf("初始化成功\n");
+				printf("请选择下一个功能\n\n\n");
+			}
+        }
+        if(a==2)
+		{
+			printf("请输入将要输入A的元素的个数\n");
+			scanf("%d",&b);
+            sr(A,b);
+			printf("请输入将要输入B的元素的个数\n");
+			scanf("%d",&b);
+            sr(B,b);
+			printf("请选择下一个功能\n\n\n");
+		}
+        if(a==3)
+		{
+            hb(A,B);
+			printf("请选择下一个功能\n\n\n");
+			s=4;
+		}
+        if(a==4)
+		{
+			if(s==4)
+			{
+				printf("A:");
+				sc(A);
+			}
+			else
+			{
+				printf("输入1输出A,输入2输出B(每次只能选择一个)\n");
+				scanf("%d",&s);
+				if(s==1)
+				{
+					printf("A:");
+					sc(A);
+				}
+				if(s==2)
+				{
+					printf("B:");
+					sc(B);
+				}
+			}
+			printf("请选择下一个功能\n\n\n");
+		}
+        if(a==5)
+            break;
+    }
+    return 0;
+}

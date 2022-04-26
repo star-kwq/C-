@@ -1,0 +1,110 @@
+/*Problem A: 函数类型和参数：输出15个星号
+Description
+编写函数，输出15个星号。（此题主要考虑如何设置函数类型和参数更加合理）
+
+Input
+Output
+Sample Input
+Sample Output
+*************** */
+
+#include<stdio.h>
+int f(int);
+int main()
+{
+	int i;
+	for(i=1;i<=15;i++)
+	{
+		if(f(i)==1)
+			printf("*");
+	}
+	printf("\n");
+	return 0;
+}
+int f(int i)
+{
+	if(i>15)
+		return 0;
+	return 1;
+}
+--------------------------------------------------------------------------------------------------------------------------------------
+/*Description
+从键盘输入两个三位数的整数，统计m~n范围内的水仙花数，并求所有水仙花数之和。
+
+
+Input
+两个三位数
+
+
+Output
+水仙花数总数  水仙花数之和
+
+
+Sample Input
+100 200
+Sample Output
+1 153*/
+#include<stdio.h>
+int main()
+{
+	int f(int);
+	int g,h=0,m,n,i,j=0;
+	scanf("%d %d",&m,&n);
+                if(m>n)
+	{
+		t=n;
+		m=n;
+		n=t;
+	}
+
+	for(i=m;i<=n;i++)
+	{
+		g=f(i);
+		if(g==1)
+		{
+			h=h+i;
+			j=j+1;
+		}
+	}
+	printf("%d %d\n",j,h);
+	return 0;
+}
+int f(int i)
+{
+	int a,b,c;
+	a=i%10;
+	b=i/10%10;
+	c=i/100;
+	if(a*a*a+b*b*b+c*c*c==i)
+		return 1;
+	return 0;
+}
+--------------------------------------------------------------------------------------------------------------------------------------
+/*Description
+对100~200间的素数求和，请编写函数，判断一个数是否素数。
+
+
+Input
+Output
+Sample Input
+Sample Output
+3167*/
+#include<stdio.h>
+int f(int x);
+int main()
+{
+    int t=1,i,sum=0;
+    for(i=100;i<=200;++i)
+        if(f(i)) sum+=i;
+    printf("%d\n",sum);
+}
+int f(int x)
+{
+    int i;
+    if(x<=1)
+    return 0;
+    for(i=2;i<x;++i)
+        if(x%i==0)
+            return 0;
+    return 1;
+}

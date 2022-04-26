@@ -1,0 +1,153 @@
+
+/*Description
+已知后台所给的数据库文件中，肯定有“math”、“english”和“computer”这三个字段，求这三个字段的起始位置、字段宽度和小数位数。
+
+
+
+文件头结构的内容是二进制方式存储的，从键盘输入一个数组，打开相应的数据库文件。求该数据库文件求各字段的起始位置、字段宽度和小数位数。
+
+
+
+键盘输入数字与数据库文件的对应关系是：
+
+
+
+1----------aaa.dic
+
+
+
+2----------bbb.dic
+Input
+Output
+math字段起始位置、字段宽度和小数位数
+
+
+
+english字段起始位置、字段宽度和小数位数
+
+
+
+computer字段起始位置、字段宽度和小数位数
+
+
+
+*/
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int main()
+{
+	FILE *fp;
+	char m[10];
+	long wz;
+	int i,c,k=0,x=0;
+	short a;
+	scanf("%d",&c);
+	if(c==1)
+		fp=fopen("aaa.dic","r");
+	else
+		fp=fopen("bbb.dic","r");
+	if(fp==NULL)
+	{
+		printf("打开失败\n");
+		exit(1);
+	}
+	fseek(fp,8,0);
+	fread(&a,2,1,fp);
+	a=(a-32-1)/32;
+	for(i=1;i<=a;i++)
+	{
+		fseek(fp,32*i,0);
+		fread(m,1,10,fp);
+		if(0==strcmp(m,"math"))
+		{
+			fseek(fp,2,1);
+			fread(&wz,4,1,fp);
+			fread(&k,1,1,fp);
+			fread(&x,1,1,fp);
+			printf("%ld,%d,%d\n",wz,k,x);
+		}
+	}
+	for(i=1;i<=a;i++)
+	{
+		fseek(fp,32*i,0);
+		fread(m,1,10,fp);
+		if(0==strcmp(m,"english"))
+		{
+			fseek(fp,2,1);
+			fread(&wz,4,1,fp);
+			fread(&k,1,1,fp);
+			fread(&x,1,1,fp);
+			printf("%ld,%d,%d\n",wz,k,x);
+		}
+	}
+	for(i=1;i<=a;i++)
+	{
+		fseek(fp,32*i,0);
+		fread(m,1,10,fp);
+		if(0==strcmp(m,"computer"))
+		{
+			fseek(fp,2,1);
+			fread(&wz,4,1,fp);
+			fread(&k,1,1,fp);
+			fread(&x,1,1,fp);
+			printf("%ld,%d,%d\n",wz,k,x);
+		}
+	}
+	fclose(fp);
+	return 0;
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------
+/*文件aaa.dic、bbb.dic都是数据库文件（都在当前目录中）。已知后台所给的数据库文件中，肯定有“math”这一个字段。
+数据库文件的文件头是一种固定的结构，如下表所示，文件头结构的内容是二进制方式存储的，从键盘输入一个数组，打开相应的数据库文件。
+求该数据库文件求math字段的起始位置、字段宽度和小数位数。
+盘输入数字与数据库文件的对应关系是：
+
+1----------aaa.dic
+
+2----------bbb.dic
+
+Input
+Output
+math字段的起始位置，字段宽度，小数位数
+
+*/
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int main()
+{
+	FILE *fp;
+	char m[10];
+	long wz;
+	int i,c,k=0,x=0;
+	short a;
+	scanf("%d",&c);
+	if(c==1)
+		fp=fopen("aaa.dic","r");
+	else
+		fp=fopen("bbb.dic","r");
+	if(fp==NULL)
+	{
+		printf("打开失败\n");
+		exit(1);
+	}
+	fseek(fp,8,0);
+	fread(&a,2,1,fp);
+	a=(a-32-1)/32;
+	for(i=1;i<=a;i++)
+	{
+		fseek(fp,32*i,0);
+		fread(m,1,10,fp);
+		if(0==strcmp(m,"math"))
+		{
+			fseek(fp,2,1);
+			fread(&wz,4,1,fp);
+			fread(&k,1,1,fp);
+			fread(&x,1,1,fp);
+		}
+	}
+	fclose(fp);
+	printf("%ld,%d,%d\n",wz,k,x);
+	return 0;
+}

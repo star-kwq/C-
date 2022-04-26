@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <graphics.h>
+
+#define S 24                /*  S:汉字点阵数*/
+#define HZK  "HZK24f"  /*汉字字库路径及文件名*/
+
+void disphz(int x,int y,char *p,char *q,int color,int m)   /*m是放大倍数*/
+{
+int  i, j, n, k;
+ FILE *fp;
+ char qh,wh;
+ long offset;
+ char buffer[S*S/8];
+ char mask[]={0x80,0x40,0x20,0x10,0x08,0x04,0x02,0x01};
+
+ if ((fp = fopen(HZK,"rb")) == NULL)
+   exit(0);
+ while(*q!='\0')
+   {
+		qh = *q - 0xa0-15;          /*计算区号*/
+		q++;
+		wh = *q - 0xa0;          /*计算位号*/
+		q++;
+		offset = (94L * (qh -1) + wh - 1) * S * S / 8;   /*计算地址码*/
+		fseek(fp,offset,0);
+		fread(buffer,S*S/8,1,fp);
+		for( i = 0; i < S * S / 8 ; i++)
+		  {
+		   for ( j = 0; j<=7; j++)
+		 if((buffer[i] & mask[j]) != 0)
+			putpixel( x + i*8/S,  y + (i % (S/8)) * 8 + j,  color );
+		  }
+		x+=S+5;      /*下一个汉字的坐标（横向显示），字间距为5像素*/
+   }
+ getch();
+cleardevice();
+ while(*p != '\0')
+ {
+    qh = *p - 0xa0-15;          /*计算区号*/
+    p++;
+    wh =*p - 0xa0;          /*计算位号*/
+    p++;
+    offset = (94L* (qh -1) + wh -1) * S * S / 8;   /*计算地址码*/
+    fseek(fp,offset,0);
+    fread(buffer, S * S / 8, 1, fp);
+    for ( i = 0 ;i<S; i++)
+	{
+      for( j = 0; j<S; j++)
+	  {
+		 if (( buffer[S/8*i+j/8] & mask[j%8]) != 0)
+	     for( n = 0; n<m; n++)
+	       for( k = 0; k<m; k++)
+		 putpixel( x+i*m+k, y+j*m+n, color);
+      }
+    }
+    x += S *m + 5;
+ }
+ fclose(fp);
+}
+
+int main()
+{
+ int device = VGA;
+ int mode = VGAHI;
+ char *p = "孔文强";
+ initgraph(&device,&mode,"D:\\TC\\TC\\DISK_C\\TC20");
+ disphz(150,200,p,p,YELLOW,2);
+ getch();
+ closegraph();
+ return 0;
+}

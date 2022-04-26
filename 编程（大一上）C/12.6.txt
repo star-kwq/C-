@@ -1,0 +1,169 @@
+输入一个字符串，将前 n个字符复制到另一个数组，使之成为一个字符串并输出。
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char a[10],b[10]="\0";
+	int n;
+	gets(a);
+	scanf("%d",&n);
+	strncpy(b,a,n);
+	printf("%s\n",b);
+	return 0;
+}
+-------------------------------------------------------------------------------------------------------
+键盘输入一个字符串，判断它是不是回文字符串。所谓回文，是指顺读 、倒读 都相同。
+
+如abcba   ,abccba如果是回文，输出1，如果不是回文，输出0
+
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char a[81],b[81],d[81],t;
+	int i,n,c;
+	gets(a);
+	n=strlen(a);
+	strcpy(d,a);
+	for(i=0;i<n/2;i++)
+	{
+		t=a[i];
+		a[i]=a[n-i-1];
+		a[n-i-1]=t;
+	}
+	strcpy(b,a);
+	if(strcmp(d,b)==0)
+		c=1;
+	else
+		c=0;
+	printf("%d",c);
+	return 0;
+}
+-------------------------------------------------------------------------------------------------------
+键盘输入N 行英文句子，每行最多80个字符，分别统计每行中所有字符的个数
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char a[81];
+	int b[100];
+	int i,n,x;
+	scanf("%d",&n);
+	for(i=0;i<=n;i++)
+	{
+		gets(a);
+		x=strlen(a);
+		b[i]=x;
+	}
+	for(i=1;i<n;i++)
+		printf("%d ",b[i]);
+	printf("%d",b[n]);
+	return 0;
+}
+-------------------------------------------------------------------------------------------------------
+输入N个字符串，求出最长字符串，最长的字符不超过20.
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char a[21],b[21];
+	int i,n,j,k,max=0;
+	scanf("%d",&n);
+	for(i=0;i<=3;i++)
+	{
+		gets(a);
+		k=strlen(a);
+		if(k>=max)
+		{
+			max=k;
+			strcpy(b,a);
+		}
+	}
+	puts(b);
+
+	return 0;
+}
+-------------------------------------------------------------------------------------------------------
+Description
+输入n个字符串，每一个串长度不超过40，将这些字符串连接在一起，输出
+
+Input
+ 整数n
+
+n个字符串
+
+Output
+连接后的字符串
+
+Sample Input
+4
+aaa
+bbbn
+cccd
+eeem
+Sample Output
+aaabbbncccdeeem
+
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char a[41],b[41];
+	int i,n;
+	scanf("%d",&n);
+	gets(a);
+	for(i=0;i<n;i++)
+	{
+		gets(b);
+		strcat(a,b);
+	}
+	puts(a);
+	return 0;
+}
+-------------------------------------------------------------------------------------------------------
+/*Description
+输入两个字符串，在第一个串的第m个字符后插入字符串2
+
+Input
+整数m 
+
+两个字符串
+
+Output
+插入后新的字符串
+
+Sample Input
+3
+abcdef
+mn
+Sample Output
+abcmndef*/
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char a[50],b[50],c[100]={0};
+	int i,j,n,m,h,k;
+	scanf("%d",&n);
+	getchar();
+	gets(a);
+	gets(b);
+	m=strlen(a);
+	strncpy(c,a,n);
+	strcat(c,b);
+	h=strlen(c);
+	i=n;
+	while(i<m)
+	{
+		k=h;
+		for(j=h;j<=k+m-n;j++)
+		{
+			c[j]=a[i];
+			break;
+		}
+		h=h+1;
+		i++;
+	}
+	puts(c);
+	return 0;
+}

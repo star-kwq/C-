@@ -1,0 +1,34 @@
+#include<stdio.h>
+int main()
+{   
+    int n=1;
+    char a;
+    for(;(a=getchar())!='\n';)
+    {
+        if(n==1)
+        {
+            if(a>='0'&&a<='9')
+            {
+                n++;
+                printf("NO");
+                break;
+            }
+            n=0;
+        }
+        if(a<'0'||a>'9'&&a<'A'||a>'Z'&&a<'_'||a>'_'&&a<'a'||a>'z'&&a<127)
+        {
+            printf("NO");
+            break;
+        }
+        if(n!=1)
+            if(a>='a'&&a>='z'||a>='A'&&a<='Z'||a=='_'||a>='0'&&a<='9')
+            {
+                printf("YES");
+                    break;
+            }
+ 
+             
+    }
+     
+    return 0;
+}

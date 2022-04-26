@@ -1,0 +1,486 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct
+{
+    int x;//存坐标
+    int y;
+}zdrl;
+struct ZQ
+{
+    int ding;//栈顶
+    zdrl *s;
+};
+struct ZQ * cjz(int n)//创建栈,n是最大容量主函数有定义
+{
+    struct ZQ *p;//顺序栈类型的指针
+    p=(struct ZQ *)malloc(sizeof(struct ZQ));
+    if(p==NULL)
+        printf("创建失败\n");
+    else
+	{
+        p->ding=-1;
+		p->s=(zdrl *)malloc(sizeof(zdrl)*n);
+	}
+	if(p->s==NULL)
+	{
+		free(p);
+		return NULL;
+	}
+    return p;
+}
+int pd(struct ZQ *p)//判断
+{
+    return p->ding==-1;//返回1栈空,0栈满
+}
+void rz(struct ZQ *p,zdrl zb)//入栈函数
+{
+    if(p->ding<10000)
+    {
+       p->ding+=1;
+       p->s[p->ding]=zb;//zb结构体变量
+    }
+    else
+        printf("栈满\n");
+ 
+}
+void cz(struct ZQ *p)//出栈函数
+{
+ 
+    if(p->ding>=0)
+        p->ding-=1;
+    else
+         printf("栈空\n");
+ 
+}
+zdrl qd(struct ZQ *p)//取栈顶元素
+{
+    return p->s[p->ding];
+}
+int main()
+{
+    int a,b,x1,x2,y1,y2;//a行,b列
+    int sz[100][100];//存迷宫
+    int i,j,bd=0,t1=0,t2=0,t3=0,t4=0,K=0,K1=0,d=10000;//bd变得坐标(上下左右)，t判断if是否运行,K判断条件
+    struct ZQ *p;
+    zdrl zb;
+    scanf("%d %d",&a,&b);
+    scanf("%d %d %d %d",&x1,&y1,&x2,&y2);
+    for(i=0;i<a;i++)
+        for(j=0;j<b;j++)
+    {
+        scanf("%d",&sz[i][j]);
+    }
+ 
+    p=cjz(d);//创建栈
+    zb.x=x1;
+    zb.y=y1;
+    sz[x1][y1]=2;//标记
+    rz(p,zb);//起点入栈
+	i=x1;
+	j=y1;
+	while(K==0)
+	{
+		t1=t2=t3=t4=0;
+		bd=i-1;
+		if(sz[bd][j]==0)
+		{
+			i=zb.x=bd;
+			j=zb.y=j;
+			sz[bd][j]=2;
+			rz(p,zb);
+			t1=1;
+		}
+		bd=i+1;
+		if(sz[bd][j]==0&&t1==0)
+		{
+			i=zb.x=bd;
+			j=zb.y=j;
+			sz[bd][j]=2;
+			rz(p,zb);                       //寻找点
+			t2=1;
+		}
+		bd=j-1;
+		if(sz[i][bd]==0&&t1==0&&t2==0)
+		{
+			i=zb.x=i;
+			j=zb.y=bd;
+			sz[i][bd]=2;
+			rz(p,zb);
+			t3=1;
+		}
+		bd=j+1;
+		if(sz[i][bd]==0&&t1==0&&t2==0&&t3==0)
+		{
+			i=zb.x=i;
+			j=zb.y=bd;
+			sz[i][bd]=2;
+			rz(p,zb);
+			t4=1;
+		}
+		if(zb.x==x2&&zb.y==y2)
+			K=1;
+		if(zb.x==x1&&zb.y==y1&&sz[x1+1][y1]!=0&&sz[x1-1][y1]!=0&&sz[x1][y1-1]!=0&&sz[x1][y1+1]!=0)
+		{
+			K1=1;
+			K=1;
+		}
+		if(t1==0&&t2==0&&t3==0&&t4==0&&K==0)
+			while(pd(p)!=1)//判断栈是否为空
+			{	
+				zb=qd(p);
+				if(sz[zb.x+1][zb.y]==0||sz[zb.x-1][zb.y]==0||sz[zb.x][zb.y-1]==0||sz[zb.x][zb.y+1]==0)//到头并且不是终点时原路返回
+				{
+					i=zb.x;
+					j=zb.y;
+					break;
+				}
+				cz(p);
+			}	
+		}
+	zb=qd(p);
+	if(zb.x==x2&&zb.y==y2)
+		for(i=0;i<=p->ding;i++) 
+			printf("(%d %d)",p->s[i].x,p->s[i].y);		
+	if(K1==1)
+		printf("No Path!\n");
+	return 0;
+}
+////////////////////////////////////////////////////////
+ #include<stdio.h>
+#include<stdlib.h>
+typedef struct
+{
+    int x;//存坐标
+    int y;
+}zdrl;
+struct ZQ
+{
+    int ding;//栈顶
+    zdrl *s;
+};
+struct ZQ * cjz(int n)//创建栈,n是最大容量主函数有定义
+{
+    struct ZQ *p;//顺序栈类型的指针
+    p=(struct ZQ *)malloc(sizeof(struct ZQ));
+    if(p==NULL)
+        printf("创建失败\n");
+    else
+	{
+        p->ding=-1;
+		p->s=(zdrl *)malloc(sizeof(zdrl)*n);
+	}
+	if(p->s==NULL)
+	{
+		free(p);
+		return NULL;
+	}
+    return p;
+}
+int pd(struct ZQ *p)//判断
+{
+    return p->ding==-1;//返回1栈空,0栈满
+}
+void rz(struct ZQ *p,zdrl zb)//入栈函数
+{
+    if(p->ding<10000)
+    {
+       p->ding+=1;
+       p->s[p->ding]=zb;//zb结构体变量
+    }
+    else
+        printf("栈满\n");
+ 
+}
+void cz(struct ZQ *p)//出栈函数
+{
+ 
+    if(p->ding>=0)
+        p->ding-=1;
+    else
+         printf("栈空\n");
+ 
+}
+zdrl qd(struct ZQ *p)//取栈顶元素
+{
+    return p->s[p->ding];
+}
+int dghs(int i,int j,int **sz,int x2,int y2,struct ZQ *p,int a,int b)
+{
+	int bd=0,t1=0,t2=0,t3=0,t4=0,k=2,x1,y1;
+	int m=0,m1,m2,m3,m4,z[100][100],l1,l2;
+	int *q=*sz;
+    zdrl zb;
+	for(l1=0;l1<a;l1++)
+        for(l2=0;l2<b;l2++)
+			z[l1][l2]=*(*sz+l1)+l2;
+	x1=i;
+	y1=j;
+	bd=i-1;
+	m=*(*sz+bd)+j;
+	if(m==0)	
+	{
+		i=zb.x=bd;
+		j=zb.y=j;
+		z[bd][j]=2;
+		rz(p,zb);
+		t1=1;
+	}
+	bd=i+1;
+	m=*(*sz+bd)+j;
+	if(m==0&&t1==0)
+	{
+		i=zb.x=bd;
+		j=zb.y=j;
+		z[bd][j]=2;
+		rz(p,zb);                       //寻找点
+		t2=1;
+	}
+printf("%d %d %d %d\n",t1,t2,t3,t4);
+printf("%d\n",*(*sz+bd)+j);
+	bd=j-1;
+	m=*(*sz+i)+bd;
+	if(m==0&&t1==0&&t2==0)
+	{
+		i=zb.x=i;
+		j=zb.y=bd;
+		z[i][bd]=2;
+		rz(p,zb);
+		t3=1;
+	}
+	bd=j+1;
+	m=*(*sz+i)+bd;
+	if(m==0&&t1==0&&t2==0&&t3==0)
+	{
+		i=zb.x=i;
+		j=zb.y=bd;
+		z[i][bd]=2;
+		rz(p,zb);
+		t4=1;
+	}
+	if(zb.x==x2&&zb.y==y2)
+	{
+		k=0;
+		return k;
+	}
+	m1=*(*sz+(x1+1))+y1;
+	m2=*(*sz+(x1-1))+y1;
+	m3=*(*sz+x1)+(y1-1);
+	m4=*(*sz+x1)+(y1+1);
+	if(zb.x==x1&&zb.y==y1&&m1!=0&&m2!=0&&m3!=0&&m4!=0)
+	{
+		k=1;
+		return k;
+	}
+	if(t1==0&&t2==0&&t3==0&&t4==0)
+	{
+		while(pd(p)!=1)//判断栈是否为空
+		{	
+			zb=qd(p);
+			m1=*(*sz+(zb.x+1))+(zb.y);
+			m2=*(*sz+(zb.x-1))+(zb.y);
+			m3=*(*sz+zb.x)+(zb.y-1);
+			m4=*(*sz+zb.x)+(zb.y+1);
+			if(m1==0||m2==0||m3==0||m4==0)//到头并且不是终点时原路返回
+				break;
+			cz(p);
+		}
+	}
+	zb=qd(p);
+	k=dghs(i,j,&q,x2,y2,p,a,b);
+	printf("(4)\n");
+	if(k==0||k==1)
+		return k;
+}
+int main()
+{
+    int a,b,x1,x2,y1,y2;//a行,b列
+    int sz[100][100];//存迷宫
+    int i,j,K1=0,d=10000;//bd变得坐标(上下左右)，t判断if是否运行,K判断条件
+    struct ZQ *p;
+	int *q=sz[0];
+    zdrl zb;
+    scanf("%d %d",&a,&b);
+    scanf("%d %d %d %d",&x1,&y1,&x2,&y2);
+    for(i=0;i<a;i++)
+        for(j=0;j<b;j++)
+        scanf("%d",&sz[i][j]);
+    p=cjz(d);//创建栈
+    zb.x=x1;
+    zb.y=y1;
+    sz[x1][y1]=2;//标记
+    rz(p,zb);//起点入栈
+	//printf("(+)\n");
+	K1=dghs(x1,y1,&q,x2,y2,p,a,b);
+	//printf("(-)\n");
+	zb=qd(p);
+	if(zb.x==x2&&zb.y==y2&&K1==0)
+		for(i=0;i<=p->ding;i++) 
+			printf("(%d %d)",p->s[i].x,p->s[i].y);		
+	if(K1==1)
+		printf("No Path!\n");
+	return 0;
+}
+/////////////////////////////
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct
+{
+    int x;//存坐标
+    int y;
+}zdrl;
+struct ZQ
+{
+    int ding;//栈顶
+    zdrl *s;
+};
+struct ZQ * cjz(int n)//创建栈,n是最大容量主函数有定义
+{
+    struct ZQ *p;//顺序栈类型的指针
+    p=(struct ZQ *)malloc(sizeof(struct ZQ));
+    if(p==NULL)
+        printf("创建失败\n");
+    else
+	{
+        p->ding=-1;
+		p->s=(zdrl *)malloc(sizeof(zdrl)*n);
+	}
+	if(p->s==NULL)
+	{
+		free(p);
+		return NULL;
+	}
+    return p;
+}
+int pd(struct ZQ *p)//判断
+{
+    return p->ding==-1;//返回1栈空,0栈满
+}
+void rz(struct ZQ *p,zdrl zb)//入栈函数
+{
+    if(p->ding<10000)
+    {
+       p->ding+=1;
+       p->s[p->ding]=zb;//zb结构体变量
+    }
+    else
+        printf("栈满\n");
+ 
+}
+void cz(struct ZQ *p)//出栈函数
+{
+ 
+    if(p->ding>=0)
+        p->ding-=1;
+    else
+         printf("栈空\n");
+ 
+}
+zdrl qd(struct ZQ *p)//取栈顶元素
+{
+    return p->s[p->ding];
+}
+int dghs(int i,int j,int *sz[100][100],int x2,int y2,struct ZQ *p,int a,int b)
+{
+	int bd=0,t1=0,t2=0,t3=0,t4=0,k=2,x1,y1;
+	/*int m=0,m1,m2,m3,m4,z[100][100],l1,l2;*/
+	//int *q=*sz;
+    zdrl zb;
+	/*for(l1=0;l1<a;l1++)
+        for(l2=0;l2<b;l2++)
+			z[l1][l2]=*(*sz+l1)+l2;*/
+	x1=i;
+	y1=j;
+	bd=i-1;
+	if((*sz)[bd][j]==0)	
+	{
+		i=zb.x=bd;
+		j=zb.y=j;
+		(*sz)[bd][j]=2;
+		rz(p,zb);
+		t1=1;
+	}
+	bd=i+1;
+	if((*sz)[bd][j]==0&&t1==0)
+	{
+		i=zb.x=bd;
+		j=zb.y=j;
+		(*sz)[bd][j]=2;
+		rz(p,zb);                       //寻找点
+		t2=1;
+	}
+/*printf("%d %d %d %d\n",t1,t2,t3,t4);
+printf("%d\n",*(*sz+bd)+j);*/
+	bd=j-1;
+	if((*sz)[i][bd]==0&&t1==0&&t2==0)
+	{
+		i=zb.x=i;
+		j=zb.y=bd;
+		(*sz)[i][bd]=2;
+		rz(p,zb);
+		t3=1;
+	}
+	bd=j+1;
+	
+	if((*sz)[i][bd]==0&&t1==0&&t2==0&&t3==0)
+	{
+		i=zb.x=i;
+		j=zb.y=bd;
+		(*sz)[i][bd]=2;
+		rz(p,zb);
+		t4=1;
+	}
+	if(zb.x==x2&&zb.y==y2)
+	{
+		k=0;
+		return k;
+	}
+	if(zb.x==x1&&zb.y==y1&&(*sz)[x1+1][y1]!=0&&(*sz)[x1-1][y1]!=0&&(*sz)[x1][y1-1]!=0&&(*sz)[x1][y1+1]!=0)
+	{
+		k=1;
+		return k;
+	}
+	if(t1==0&&t2==0&&t3==0&&t4==0)
+	{
+		while(pd(p)!=1)//判断栈是否为空
+		{	
+			zb=qd(p);
+			if((*sz)[zb.x+1][zb.y]==0||(*sz)[zb.x-1][zb.y]==0||(*sz)[zb.x][zb.y-1]==0||(*sz)[zb.x][zb.y+1]==0)//到头并且不是终点时原路返回
+				break;
+			cz(p);
+		}
+	}
+	zb=qd(p);
+	k=dghs(i,j,sz,x2,y2,p,a,b);
+	printf("(4)\n");
+	if(k==0||k==1)
+		return k;
+}
+int main()
+{
+    int a,b,x1,x2,y1,y2;//a行,b列
+    int sz[100][100];//存迷宫
+    int i,j,K1=0,d=10000;//bd变得坐标(上下左右)，t判断if是否运行,K判断条件
+    struct ZQ *p;
+	//int *q=sz[0];
+    zdrl zb;
+    scanf("%d %d",&a,&b);
+    scanf("%d %d %d %d",&x1,&y1,&x2,&y2);
+    for(i=0;i<a;i++)
+        for(j=0;j<b;j++)
+        scanf("%d",&sz[i][j]);
+    p=cjz(d);//创建栈
+    zb.x=x1;
+    zb.y=y1;
+    sz[x1][y1]=2;//标记
+    rz(p,zb);//起点入栈
+	//printf("(+)\n");
+	K1=dghs(x1,y1,&sz,x2,y2,p,a,b);
+	//printf("(-)\n");
+	zb=qd(p);
+	if(zb.x==x2&&zb.y==y2&&K1==0)
+		for(i=0;i<=p->ding;i++) 
+			printf("(%d %d)",p->s[i].x,p->s[i].y);		
+	if(K1==1)
+		printf("No Path!\n");
+	return 0;
+}

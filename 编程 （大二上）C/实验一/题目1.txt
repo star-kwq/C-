@@ -1,0 +1,211 @@
+#include<stdio.h>
+#define FPL 20
+#define FPZL 10
+typedef struct
+{
+    int *jz;
+    int cd;
+    int dckj;
+}jgt;
+int csh(jgt * k)//初始化
+{
+    k->jz=(int*)malloc(FPL*sizeof(int));
+    if(k->jz==NULL)
+    {
+        printf("初始化失败");
+        return 0;
+    }
+    k->cd=0;
+    k->dckj=FPL;
+    return 1;
+}
+  
+ 
+ 
+void sr(jgt *k)//输入
+{
+    int i,n,j,h,c;
+    int *q;
+    printf("请输入要输入元素的个数\n");
+    scanf("%d",&n);
+	c=k->cd;
+    for(i=c;i<c+n;i++)
+    {
+        scanf("%d",&k->jz[i]);
+        k->cd+=1;
+        if(k->cd>=k->dckj)
+        {
+            q=(int*)malloc((k->dckj+FPZL)*sizeof(int));
+            k->jz=q;
+            k->dckj+=FPZL;
+        }
+    }
+    for(i=0;i<=c+n-2;i++)
+        for(j=0;j<=c+n-i-2;j++)
+        {
+            if(k->jz[j]>k->jz[j+1])
+            {
+                h=k->jz[j];
+                k->jz[j]=k->jz[j+1];
+                k->jz[j+1]=h;
+            }
+        }
+}
+ 
+void cr(jgt *k)//插入
+{
+    int i,n,j,c,d=0;
+    int *q;
+    printf("请输入要插入的元素\n");
+    scanf("%d",&n);
+    if(k->cd+1>k->dckj)
+    {
+        q=(int*)malloc((k->dckj+FPZL)*sizeof(int));
+        k->jz=q;
+        k->dckj+=FPZL;
+    }
+	c=k->cd;
+    for(i=0;i<c;i++)
+    {
+		if(k->jz[0]<k->jz[1])
+		{
+			if(n<k->jz[i]&&d==0)
+			{
+				for(j=k->cd;j>=i;j--)
+					k->jz[j+1]=k->jz[j];
+				k->jz[i]=n;
+				k->cd+=1;
+				d++;
+			}
+			else if(d==0&&i==c-1)
+			{
+				k->cd+=1;
+				k->jz[k->cd-1]=n;
+				d++;
+			}
+		}
+		if(k->jz[0]>k->jz[1])
+		{
+			if(n>k->jz[i]&&d==0)
+			{
+				for(j=k->cd;j>=i;j--)
+					k->jz[j+1]=k->jz[j];
+				k->jz[i]=n;
+				k->cd+=1;
+				d++;
+			}
+			else if(d==0&&i==k->cd-1)
+			{
+				k->cd+=1;
+				k->jz[k->cd-1]=n;
+				d++;
+			}
+		}
+		
+    }
+}
+ 
+ 
+void sc(jgt *k)//删除
+{
+    int i,j,n;
+    printf("请输入要删除的元素\n");
+    scanf("%d",&n);
+    for(i=0;i<k->cd;i++)
+    {
+        if(n==k->jz[i])
+        {
+            for(j=i;j<k->cd;j++)
+                k->jz[j]=k->jz[j+1];
+            k->cd-=1;	
+        }
+		if(n==k->jz[i]&&i==k->cd)
+		{
+			k->jz[i]=0;
+		}
+    }
+}
+void nz(jgt *k)//逆置
+{
+    int i,j,h;
+	if(k->jz[0]<k->jz[1])
+	{
+		for(i=0;i<=k->cd-2;i++)
+			for(j=0;j<=k->cd-i-2;j++)
+			{
+				if(k->jz[j]<k->jz[j+1])
+				{
+					h=k->jz[j];
+					k->jz[j]=k->jz[j+1];
+					k->jz[j+1]=h;
+				}
+			}
+	}
+	else
+	{
+		for(i=0;i<=k->cd-2;i++)
+			for(j=0;j<=k->cd-i-2;j++)
+			{
+				if(k->jz[j]>k->jz[j+1])
+				{
+					h=k->jz[j];
+					k->jz[j]=k->jz[j+1];
+					k->jz[j+1]=h;
+				}
+			}
+	}
+}
+void SC(jgt *k)//输出
+{
+    int i;
+	printf("顺序表:\n");
+	if(k->cd==0)
+		printf("0\n");
+	else
+	{
+		for(i=0;i<k->cd-1;i++)
+			printf("%d ",k->jz[i]);
+		printf("%d \n",k->jz[k->cd-1]);
+	}
+}
+ 
+ 
+int main()
+{
+    int a,b;
+    jgt k;
+    printf("                        ************************************************\n");
+    printf("                        *                     顺序表                   *\n");
+    printf("                        *               1.建立顺序表                   *\n");
+    printf("                        *               2.输入元素组成顺序表           *\n");
+    printf("                        *               3.插入元素                     *\n");
+    printf("                        *               4.删除指定元素                 *\n");
+    printf("                        *               5.顺序表逆置                   *\n");
+    printf("                        *               6.输出顺序表                   *\n");
+    printf("                        *               7.结束程序                     *\n");
+    printf("                        ************************************************\n");
+    printf("                         注释：按（1——7）选择功能\n");
+    while(1==1)
+    {
+        scanf("%d",&a);
+        if(a==1)
+        {
+            b=csh(&k);
+            if(b==1)
+                printf("初始化成功\n");
+        }
+        if(a==2)
+            sr(&k);
+        if(a==3)
+            cr(&k);
+        if(a==4)
+            sc(&k);
+        if(a==5)
+            nz(&k);
+        if(a==6)
+            SC(&k);
+        if(a==7)
+            break;
+    }
+    return 0;
+}

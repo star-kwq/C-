@@ -1,0 +1,56 @@
+/*Description
+后台已有main函数，代码如下。其功能是能从键盘输入4个字符串，然后由被调函数找到最大字符串(按字典顺序最大)的位置，主函数将它输出
+int main()
+{ 
+   char *p[4],*q;
+   int i;
+   for(i=0;i<=3;i++) { 
+       p[i]=(char *)malloc(21);
+       gets(p[i]);
+   }
+   q=search(p,4); 
+   puts(q); 
+   for(i=0;i<=3;i++)
+        free(p[i]); 
+   return 0; 
+} 
+请你编写被调函数search()，其功能是能找到最大字符串的位置。
+Input
+输入四个字符串
+Output
+输出最大的字符串
+Sample Input
+abc
+I am a boy.
+world cup
+Hello
+Sample Output
+world cup*/
+#include<stdio.h>
+#include<malloc.h>
+#include<string.h>
+char *search(char **pp,int n)
+{
+	int i,max=0;
+	for(i=1;i<n;i++)
+	{
+		if(*pp[i]>*pp[max])
+			max=i;
+	}
+	return pp[max];
+}
+int main()
+{ 
+   char *p[4],*q;
+   int i;
+   for(i=0;i<=3;i++)
+   { 
+       p[i]=(char *)malloc(21);
+       gets(p[i]);
+   }
+   q=search(p,4);
+   puts(q);
+   for(i=0;i<=3;i++)
+        free(p[i]); 
+   return 0; 
+}

@@ -1,0 +1,70 @@
+#include "stdio.h"
+#include "stdlib.h"
+#include "graphics.h"
+#define S 16                 
+#define HZK  "HZK16F"
+void disphz(int x,int y,char *p,char *q,int color)
+ 
+{int  i, j,n,k,m=2;
+ FILE *fp;
+ char  qh, wh;
+ long  offset;
+ char  buffer[S*S/8];
+ char  mask[] = {0x80,0x40,0x20,0x10,0x08,0x04,0x02,0x01};
+
+ if (( fp = fopen(HZK,"rb")) == NULL)
+   exit(0);
+ while(*p!='\0')
+   {
+    qh = *p - 0xa0;          
+    p++;
+    wh = *p - 0xa0;          
+    p++;
+    offset = (94L * (qh -1) + wh - 1) * S * S / 8;   
+    fseek(fp,offset,0);
+    fread(buffer,S*S/8,1,fp);
+    for ( i = 0; i <= S -1; i++)
+     {
+       for ( j = 0; j <= S -1; j++)
+		if (((buffer[S/8*i+j/8]) & mask[j%8]) != 0)
+			putpixel(x+j, y+i, color);
+
+     }
+    x+=S+5;     
+   }
+ 
+ getch();
+cleardevice();
+ while(*q != '\0')
+ {
+    qh = *q - 0xa0;        
+    q++;
+    wh =*q - 0xa0;        
+    q++;
+    offset = (94L* (qh -1) + wh -1) * S * S / 8;  
+    fseek(fp,offset,0);
+    fread(buffer, S * S / 8, 1, fp);
+    for ( i = 0 ;i<S; i++)
+	{
+      for( j = 0; j<S; j++)
+	  {
+		 if (( buffer[S/8*i+j/8] & mask[j%8]) != 0)
+	     for( n=0; n<m; n++)
+	       for( k=0; k<m; k++)
+		 putpixel( x+j*m+n, y+i*m+k, color);
+      }
+    }
+    x += S *m + 5;
+ }
+ fclose(fp);
+}
+
+int main()
+{char s[]="孔文强";
+ int mode,driver=DETECT;
+ initgraph(&driver,&mode,"D:\\TC\\TC\\DISK_C\\TC20");
+ disphz(250,200,s,s,15);
+ getch();
+ closegraph();
+ return 0;
+}

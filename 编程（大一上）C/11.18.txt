@@ -1,0 +1,152 @@
+/*Description
+主函数中输入4个整数，由被调函数找出最大最小值，并在主函数中输出。
+
+
+
+要求：只编写一个被调函数
+
+
+Input
+4个整数
+
+
+Output
+最大值  最小值
+
+
+Sample Input
+5 6 4 1
+Sample Output
+6 1*/
+#include<stdio.h>
+int kwq(int,int,int,int);
+int max,min;
+int main()
+{
+	int a,b,c,d;
+	scanf("%d %d %d %d",&a,&b,&c,&d);
+	kwq(a,b,c,d);
+	printf("%d %d\n",max,min);
+	return 0;
+}
+int kwq(int a,int b,int c,int d)
+{
+	if(a>b)
+	{
+		max=a;
+		min=b;
+	}
+	else
+	{
+		max=b;
+		min=a;
+	}
+	if(c>max)
+		max=c;
+	else
+	{
+		if(min>c)
+			min=c;
+	}
+	if(d>max)
+		max=d;
+	else
+	{
+		if(min>d)
+			min=d;
+	}
+	return max,min;
+}
+----------------------------------------------------------------------------------------------------------------------------
+/*Description
+编写一个函数，分别1*1+2*2+3*3+...+n*n的和
+要求使用静态局部变量
+Input
+整数n
+Output
+几次调用之后的和
+Sample Input
+4
+Sample Output
+sum=1
+sum=5
+sum=14
+sum=30*/
+#include<stdio.h>
+int kwq(int);
+int main()
+{
+	int a,x,i;
+	scanf("%d",&a);
+	for(i=1;i<=a;i++)
+	{
+		x=kwq(i);
+		printf("sum=%d\n",x);
+	}
+	return 0;
+}
+int kwq(int a)
+{
+	static int m=0;
+	m=m+a*a;
+	return m;
+}
+----------------------------------------------------------------------------------------------------------------------------
+/*Description
+编写一个函数，每次它被调用时，都可以输出这是第几次调用  要求：不允许使用全局变量
+Input
+整数n
+Output
+第几次调用
+Sample Input
+3
+Sample Output
+第1次调用
+第2次调用
+第3次调用*/
+#include<stdio.h>
+void kwq(int);
+int main()
+{
+	int a,i;
+	scanf("%d",&a);
+	for(i=1;i<=a;i++)
+		kwq(i);
+	return 0;
+}
+void kwq(int a)
+{
+	printf("第%d次调用\n",a);
+}
+----------------------------------------------------------------------------------------------------------------------------
+/*Description
+编写一个函数，求出两个整数的差的绝对值，和两个数的乘积
+在主函数中输出。
+Input
+两个整数
+Output
+差的绝对值与两个数乘积
+Sample Input
+3 -5
+Sample Output
+8 -15*/
+#include<stdio.h>
+int kwq(int,int);
+int c,j;
+int main()
+{
+	int a,b;
+	scanf("%d %d",&a,&b);
+	kwq(a,b);
+	printf("%d %d\n",c,j);
+	return 0;
+}
+int kwq(int a,int b)
+{
+	c=a-b;
+	if(c<0)
+		c=-c;
+	j=a*b;
+	return c,j;
+}
+----------------------------------------------------------------------------------------------------------------------------

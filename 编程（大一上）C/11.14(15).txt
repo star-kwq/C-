@@ -1,0 +1,55 @@
+/*Problem A: 循环：自由下落问题
+Description
+一球从M米高度自由下落，每次落地后返回原高度的一半，再落下。 它在第N次落地时反弹多高？共经过多少米？ 保留两位小数
+
+Input
+M N
+
+Output
+它在第N次落地时反弹多高？共经过多少米？ 保留两位小数，空格隔开，放在一行
+
+Sample Input
+1000 5 
+Sample Output
+31.25 2906.25*/
+#include<stdio.h>
+int main()
+{
+	int n,i;
+	float g,j,m;
+	scanf("%f %d",&m,&n);
+	j=m;
+	for(i=1;i<=n;i++)
+	{
+		m=m/2;
+		if(i==n)
+			break;
+		j=j+m*2;
+	}
+	j=j+m;
+	g=m;
+	printf("%.2f %.2f\n",g,j);
+	return 0;
+}
+---------------------------------------------------------------------------------------------------
+/*Problem B: 循环：求1+2+4+7+11+16+22+29+37+...前n项的和
+Description
+求1+2+4+7+11+16+22+29+37+...前n项的和
+
+Input
+Output
+Sample Input
+4
+Sample Output
+14*/
+#include<stdio.h>
+int main()
+{
+	int n,i,m,g;
+	scanf("%d",&m);
+	for(i=1;i<=n;i++)
+	{	
+	}
+	printf("%d\n",g);
+	return 0;
+}

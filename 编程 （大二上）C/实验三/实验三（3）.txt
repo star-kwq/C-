@@ -1,0 +1,123 @@
+/*题目3、编写一完整程序完成以下功能：
+1.	假设以带头结点的循环链表表示队列，并且只设一个指针指向队尾结点（不设队头指针），试编写算法完成相应的置空队列、入队列和出队列。
+2、完成循环队列的初始化、入队列和出队列运算。
+*/
+#include<stdio.h>
+#include<stdlib.h>
+struct jd
+{
+	int a;
+	struct jd* xyg;
+	struct jd* tjd;
+};
+typedef struct jd* jgt;
+jgt cjlb()//创建链表
+{
+	jgt head;
+	head=(jgt)malloc(sizeof(struct jd));
+	if(head==NULL)
+		printf("创建失败\n");
+	else
+	{
+		head->tjd=head;
+		head->xyg=NULL;
+	}
+	return head;
+}
+void rd(jgt head)//入队
+{
+	int e;
+	jgt p1,p;
+	while(1)
+	{
+		p=(jgt)malloc(sizeof(struct jd));
+		if(p==NULL)
+			printf("建结点失败");
+		else
+		{
+			scanf("%d",&e);
+			if(e!=1111)
+			{
+				p->a=e;
+				p1=head;
+				while(p1->xyg!=NULL)
+				{
+					p1=p1->xyg;
+				}
+				p1->xyg=p;
+				p->tjd=p1->tjd;
+				p1->tjd=NULL;
+				p->xyg=NULL;
+			}
+			else
+				break;
+		}
+	}
+}
+
+void qx(jgt head)//全部显示。
+{
+	jgt p;
+	p=head->xyg;
+	while(p->xyg!=NULL)
+	{
+		printf("%d ",p->a);
+		p=p->xyg;
+	}
+	printf("%d\n",p->a);
+}
+void cd(jgt head)//出队
+{
+	jgt p,p1;
+	p=head;
+	if(p->xyg!=NULL)
+	{
+		p1=p->xyg;
+		p->xyg=p1->xyg;
+		printf("%d\n\n",p1->a);
+		free(p1);
+	}
+	else
+		printf("队列已空\n\n");
+}
+int main()
+{
+	jgt head;
+	int w=0;
+	printf("                               ************************************************\n");
+	printf("                               *                  循环队列                    *\n");
+	printf("                               *              1.入队                          *\n");
+	printf("                               *              2.出队                          *\n");
+	printf("                               *              3.显示全部                      *\n");
+	printf("                               *              4.结束运行                      *\n");
+	printf("                               ************************************************\n");
+	printf("                               注释：按（1-4）选择功能\n");
+	printf("                                     运行代码会自动初始化\n");
+	printf("                                     入队功能输入1111结束\n");
+	head=cjlb();
+	while(0==0)
+	{
+		printf("功能:");
+		scanf("%d",&w);
+		if(w==1)
+		{
+			printf("请输入元素\n");
+			rd(head);
+			printf("入队完成\n\n");
+		}
+		if(w==2)
+		{
+			printf("出队元素：\n");
+			cd(head);
+			
+		}
+		if(w==3)
+		{
+			printf("队列为：\n");
+			qx(head);
+		}
+		if(w==4)
+			break;
+	}
+	return 0;
+}

@@ -1,0 +1,364 @@
+/*已知后台所给的数据库文件中，肯定有“name”和“math”这两个字段，有无其他字段未知，另外，
+字段顺序也未知。请输出文件中第0条记录的name和math两个字段的值，math保留三位小数。
+文件头结构的内容是二进制方式存储的，从键盘输入一个数组，打开相应的数据库文件。
+键盘输入数字与数据库文件的对应关系是：
+
+1----------aaa.dic
+2----------bbb.dic
+Input
+Output
+name,math
+
+
+*/
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+struct HEAD
+{
+    char bz;
+    char sj[3];
+    int jlzs;
+    short wjtzcd;
+    short jlcd;
+	char a[20];
+}head;
+struct ZD
+{
+
+    char name[11];
+    char lx;
+    int wz;
+    char kd;
+    char xs;
+	char a[14];
+}zd[3];
+int main()
+{
+	FILE *fp;
+	int i,c,f=0;
+	float d=0,k=(float)0.1;
+	short a;
+	char m[20]={0};
+	char xs[10]={0};
+	scanf("%d",&c);
+	if(c==1)
+		fp=fopen("aaa.dic","r");
+	if(c==2)
+		fp=fopen("bbb.dic","r");
+	if(fp==NULL)
+	{
+		printf("打开失败\n");
+		exit(1);
+	}
+	fread(&head,32,1,fp);
+	a=(head.wjtzcd-32-1)/32;
+	for(i=0;i<a;i++)
+	{
+		fread(&zd[0],32,1,fp);
+		if(0==strcmp(zd[0].name,"math"))
+            zd[1]=zd[0];
+		else if(0==strcmp(zd[0].name,"name"))
+            zd[2]=zd[0];
+	}
+	fseek(fp,head.wjtzcd+zd[2].wz,0);
+	fread(m,1,zd[2].kd,fp);
+	for(i=zd[2].kd-1;i>=0;i--)
+	{
+		if(m[i]==' ')
+		   m[i]=0;
+		else 
+            break;
+    }
+	fseek(fp,head.wjtzcd+zd[1].wz,0);
+	fread(xs,1,zd[1].kd,fp);
+/*d=atof(xs);*/
+	for(i=0;i<zd[1].kd;i++)
+	{
+		if(f==0)
+		{
+			if(xs[i]==' ')
+				continue;
+			if(xs[i]!='.')
+				d=d*10+xs[i]-48;
+			else
+				f=1;
+		}
+		else
+		{
+			d+=(xs[i]-48)*k;
+			k*=(float)0.1;
+		}
+	}
+    printf("%s,%.3f\n",m,d);
+	fclose(fp);
+	return 0;
+}
+-------------------------------------------------------------------
+/*Description
+键盘输入数字与数据库文件的对应关系是（1----------aaa.dic，2----------bbb.dic，3----------ccc.dic）
+再输入一个学生的名字，从文件中读取该同学的math成绩（保留3位小数），若查无此人，输出NO。
+
+
+
+数据库文件的文件头是一种固定的结构，如下表所示。
+Input
+数字 
+
+
+
+姓名
+
+
+Output
+数学成绩
+
+
+Sample Input
+1
+
+zahang
+Sample Output
+91.000*/
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+struct HEAD
+{
+    char bz;
+    char sj[3];
+    int jlzs;
+    short wjtzcd;
+    short jlcd;
+	char a[20];
+}head;
+struct ZD
+{
+
+    char name[11];
+    char lx;
+    int wz;
+    char kd;
+    char xs;
+	char a[14];
+}zd[3];
+int main()
+{
+	FILE *fp;
+	int i,q,c,f=0;
+	short zds;
+	float d=0,k=(float)0.1;
+	char m[20]={0},xm[20]={0},xs[20]={0},sc;
+	scanf("%d",&c);
+	scanf("%s",xm);
+	if(c==1)
+		fp=fopen("aaa.dic","r");
+	if(c==2)
+		fp=fopen("bbb.dic","r");
+	if(c==3)
+		fp=fopen("ccc.dic","r");
+	if(fp==NULL)
+	{
+		printf("打开失败\n");
+		exit(1);
+	}
+	fread(&head,32,1,fp);
+	zds=(head.wjtzcd-32-1)/32;
+	for(i=0;i<zds;i++)
+	{
+		fread(&zd[0],32,1,fp);
+		if(0==strcmp(zd[0].name,"math"))
+            zd[1]=zd[0];
+		else if(0==strcmp(zd[0].name,"name"))
+            zd[2]=zd[0];
+	}
+	for(i=0;i<head.jlzs;i++)
+	{
+		fseek(fp,head.wjtzcd+head.jlcd*i,0);
+        fread(&sc,1,1,fp);
+        if(sc=='*')
+            continue;
+		fseek(fp,head.wjtzcd+zd[2].wz+head.jlcd*i,0);
+		fread(m,1,zd[2].kd,fp);
+		for(q=zd[2].kd-1;q>=0;q--)
+			if(m[q]==' ')
+				m[q]=0;
+		if(0==strcmp(xm,m))
+		{
+			fseek(fp,head.wjtzcd+zd[1].wz+head.jlcd*i,0);
+			fread(xs,1,zd[1].kd,fp);
+			break;
+		}
+
+	}
+	if(i==head.jlzs)
+		printf("NO\n");
+	else
+	{
+		
+		for(i=0;i<zd[1].kd;i++)
+		{
+			if(f==0)
+			{
+				if(xs[i]==' ')
+					continue;
+				if(xs[i]!='.')
+					d=d*10+xs[i]-48;
+				else
+					f=1;
+			}
+			else
+			{
+				d+=(xs[i]-48)*k;
+				k*=(float)0.1;
+			}
+		}
+	printf("%.3f\n",d);
+	}
+	fclose(fp);
+	return 0;
+}
+------------------------------------------------------------------------------3错
+/*Description
+Description
+已知后台所给的数据库文件中都存有若干记录数（不超过100）学生数据，肯定有
+“name”，“math”，"english"和"computer"这四个字段，有无其他字段未知，另外，字段顺序也未知。
+请编程序，读出所有学生的math，english和computer成绩，求三科成绩的总分，并按照总分由高到低的顺序输出每个学生的数据。
+若总分相同，english分数高的排前（分数均保留一位小数）。
+
+注意：有些记录已被删除，被删除记录输入无效记录。
+
+文件头结构的内容是二进制方式存储的，从键盘输入一个数组，打开相应的数据库文件。
+
+键盘输入数字与数据库文件的对应关系是：
+
+1----------aaa.dic
+
+2----------bbb.dic
+
+3----------ccc.dic
+Input
+Output
+每行一个学生的数据，姓名占10格（左对齐），三科成绩各占4格，总分占5格（除姓名外，其他数据都保留一位小数，右对齐，数据之间用逗号隔开）
+
+
+Sample Input
+Sample Output
+zhouyi    ,87.0,96.0,92.0,275.0
+wangwu    ,96.0,90.0,88.0,274.0
+
+ */
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+struct HEAD
+{
+    char bz;
+    char sj[3];
+    int jlzs;
+    short wjtzcd;
+    short jlcd;
+	char a[20];
+}head;
+struct ZD
+{
+
+    char name[11];
+    char lx;
+    int wz;
+    char kd;
+    char xs;
+	char a[14];
+}zd[5];
+struct XS
+{
+	char name[11];
+	float math;
+	float english;
+	float computer;
+	float zhongfen;
+}xs[100];
+int main()
+{
+	FILE *fp;
+	int i,q,c;
+	short zds;
+	char sc,sx[20]={0},yy[20]={0},dn[20]={0};
+	scanf("%d",&c);
+	if(c==1)
+		fp=fopen("aaa.dic","r");
+	if(c==2)
+		fp=fopen("bbb.dic","r");
+	if(c==3)
+		fp=fopen("ccc.dic","r");
+	if(fp==NULL)
+	{
+		printf("打开失败\n");
+		exit(1);
+	}
+	fread(&head,32,1,fp);
+	zds=(head.wjtzcd-32-1)/32;
+	for(i=0;i<zds;i++)
+	{
+		fread(&zd[0],32,1,fp);
+		if(0==strcmp(zd[0].name,"name"))
+            zd[1]=zd[0];
+		else if(0==strcmp(zd[0].name,"math"))
+            zd[2]=zd[0];
+		else if(0==strcmp(zd[0].name,"english"))
+            zd[3]=zd[0];
+		else if(0==strcmp(zd[0].name,"computer"))
+            zd[4]=zd[0];
+	}
+	for(i=0;i<head.jlzs;i++)
+	{
+		fseek(fp,head.wjtzcd+head.jlcd*i,0);
+        fread(&sc,1,1,fp);
+        if(sc=='*')
+            continue;
+		fseek(fp,head.wjtzcd+zd[1].wz+head.jlcd*i,0);
+		fread(xs[i].name,1,zd[1].kd,fp);
+		for(q=zd[1].kd-1;q>=0;q--)
+		{
+			if(xs[i].name[q]==' ')
+				xs[i].name[q]=0;
+		}
+		fseek(fp,head.wjtzcd+zd[2].wz+head.jlcd*i,0);
+		fread(sx,1,zd[2].kd,fp);
+		xs[i].math=atof(sx);
+		fseek(fp,head.wjtzcd+zd[3].wz+head.jlcd*i,0);
+		fread(yy,1,zd[3].kd,fp);
+		xs[i].english=atof(yy);
+		fseek(fp,head.wjtzcd+zd[4].wz+head.jlcd*i,0);
+		fread(dn,1,zd[4].kd,fp);
+		xs[i].computer=atof(dn);
+		xs[i].zhongfen=xs[i].math+xs[i].english+xs[i].computer;
+	}
+
+	for(q=0;q<=head.jlzs;q++)
+	{
+		for(i=0;i<=head.jlzs;i++)
+		{
+			if(xs[i].zhongfen<xs[i+1].zhongfen)
+			{
+				xs[101]=xs[i];
+				xs[i]=xs[i+1];
+				xs[i+1]=xs[101];
+			}
+			else if(xs[i].zhongfen==xs[i+1].zhongfen)
+			{
+				if(xs[i].english<xs[i+1].english)
+				{
+					xs[101]=xs[i];
+					xs[i]=xs[i+1];
+					xs[i+1]=xs[101];
+				}
+			}
+
+		}
+	}
+	for(i=0;i<head.jlzs;i++)
+		printf("%-10s,%4.1f,%4.1f,%4.1f,%5.1f\n",xs[i].name,xs[i].math,xs[i].english,xs[i].computer,xs[i].zhongfen);
+	fclose(fp);
+	return 0;
+}

@@ -1,0 +1,189 @@
+/*Description
+键盘输入10个整数存入数组，找出最大值额最小值，先将最大值与最前面的数交换，再将最小数与最后一个数交换，使得最终最大值在最前，最小值在最后。
+
+说明：输入的数据确保最大值和最小值都只有一个。注意：输出时最后一个数后没有空格。
+
+Input
+Output
+Sample Input
+7 8 1 5 9 23 6 90 2 6
+Sample Output
+90 8 6 5 9 23 6 7 2 1*/
+#include<stdio.h>
+int main()
+{
+    int a[10],i,kx,kd,max,min,m,n;
+	for(i=0;i<10;i++)
+		scanf("%d",&a[i]);
+	min=max=a[0];
+	for(i=0;i<10;i++)
+	{
+		if(max<=a[i])
+		{ 
+			max=a[i];
+			kd=i;
+		}
+		if(min>=a[i])
+		{
+			min=a[i];
+			kx=i;
+		}
+	}
+	if(kx!=0)
+	{
+		m=a[0];
+		a[0]=a[kd];
+		a[kd]=m;
+		n=a[9];
+		a[9]=a[kx];
+		a[kx]=n;
+	}
+	else
+	{
+		m=a[0];
+		a[0]=a[kd];
+		a[kd]=m;
+		n=a[9];
+		a[9]=a[kd];
+		a[kd]=n;
+	}
+	for(i=0;i<=8;i++)
+		printf("%d ",a[i]);
+	printf("%d",a[9]);
+	return 0;
+}
+----------------------------------------------------------------------------------------
+Description
+输入10个数，找出其中绝对值最小的数，将它和最后一个数交换，然后输出这10个数。注意：输出时最后一个数后没有空格。
+
+Input
+Output
+Sample Input
+10 2 30 40 50 60 70 80 90 100
+Sample Output
+10 100 30 40 50 60 70 80 90 2
+
+#include<stdio.h>
+int main()
+{
+	int a[10],max=0,min=0,i,t,b[10];	
+	for(i=0;i<=9;i++)
+	{
+		scanf("%d",&a[i]);
+		b[i]=a[i];
+	}
+	for(i=0;i<=9;i++)
+	{
+		if(b[i]<0)
+			b[i]=-b[i];
+	}
+	b[min]=b[0];
+	for(i=1;i<=9;i++)
+	{
+		if(b[min]>b[i])
+			min=i;
+	}
+	t=a[min];
+	a[min]=a[9];
+	a[9]=t;
+   for(i=0;i<=8;i++)
+	   printf("%d ",a[i]);
+   printf("%d",a[9]);
+return 0;
+}
+
+--------------------------------------------------------------------------------------
+Description
+输入两个数组，将两个数组连接成新的数组，然后按照从大到小排序。说明：每个数组最多有10个元素
+
+Input
+数组1大小
+
+数组1
+
+数组2 大小
+
+数组2
+
+Output
+连接并排序后的新数组
+
+Sample Input
+4
+1 2 5 0
+5
+10 11 4 6 9 
+Sample Output
+11 10 9 6 5 4 2 1 0 
+#include<stdio.h>
+int main()
+{
+    int i,j,x,a[10],n,m,b[10],c[20],p,q,k;
+	scanf("%d",&n);
+    for(i=0;i<n;i++)
+	{
+		scanf("%d",&a[i]);
+	}
+	scanf("%d",&m);
+	for(j=0;j<m;j++)
+	{
+        scanf("%d",&b[j]);
+	}
+	p=m+n;
+	for(i=0;i<=n-1;i++)
+	{
+		c[i]=a[i];
+	}
+	for(i=0;i<=p-1;i++)
+	{
+		c[n+i]=b[i];
+	}
+	for(i=0;i<=p-2;i++)
+	{
+		k=i;
+		for(j=i+1;j<=p-1;j++)
+		
+			if(c[j]>c[k])
+				k=j;
+		q=c[k];
+		c[k]=c[i];
+		c[i]=q;
+		
+	}
+
+	for(x=0;x<=p-1;x++)
+	printf("%d ",c[x]);
+	return 0;
+}
+
+---------------------------------------------------------------------------------------
+Description
+输入一个一维数组，将相邻的两个数的和存放到另一个一维数组中。说明：每个数组最多有10个元素
+
+Input
+整数n
+
+n个数的一维数组
+
+Output
+n-1个数的一维数组
+
+Sample Input
+5
+1 2 3 4 5
+Sample Output
+3 5 7 9
+#include <stdio.h>
+int main()
+{   
+    int a[10], b[10],i,n;
+	scanf("%d",&n);
+    for(i=0;i<n;i++)
+        scanf("%d",&a[i]);
+    for(i=0;i<n-1;i++)
+	{
+     b[i]=a[i]+a[i+1];      
+         printf("%d ",b[i]);
+	}
+		 return 0;
+}

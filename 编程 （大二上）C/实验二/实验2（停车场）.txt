@@ -1,0 +1,288 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct//停车场
+{
+	char jc;//进出
+    int ch;//车号
+    int sj;//时刻
+	int yw;//有无车0无1有
+}N;
+N cw[100];
+typedef struct W//便道
+{
+    int ch;//车号
+	int yw;//有无车0无1有
+    struct W *xyg;
+};
+typedef struct W jgt;
+
+
+jgt * csh()//初始化-------------------------------------------------
+{
+	jgt *head;
+    head=(jgt*)malloc(sizeof(jgt));
+	if(head==NULL)
+        printf("创建失败\n");
+	else
+	{
+		head->ch=0;
+		head->yw=0;
+		head->xyg=NULL;
+	}
+	return head;
+}
+
+void sr(jgt *head,int z)//输入----------------
+{
+    int i,h=0,g=0;
+    jgt *p,*p1;
+	scanf("%c %d %d",&cw[0].jc,&cw[0].ch,&cw[0].sj);
+	getchar();
+	if(strcmp(&cw[0].jc,"j")==0)//进
+	{
+		for(i=1;i<=z;i++)
+		{
+			if(cw[i].yw==0&&g==0)
+			{
+				cw[i].ch=cw[0].ch;
+				cw[i].sj=cw[0].sj;
+				cw[i].yw=1;
+				printf("%d号车停在%d车位\n",cw[i].ch,i);
+				g++;
+			}
+			else
+			{
+				if(cw[i].ch==cw[0].ch)
+					printf("%d号车已在停车场不要重复输入\n",cw[0].ch);
+				else
+					h++;
+			}
+		}
+		if(h==z&&g==0)
+		{
+			p=(jgt*)malloc(sizeof(jgt));
+			if(p==NULL)
+			  printf("输入失败\n");
+			else
+			{
+  				p->ch=cw[0].ch;
+				p->yw=1;
+				p1=head;
+				h=1;
+				while(p1->xyg!=NULL)
+				{
+					p1=p1->xyg;
+					if(p1->ch==cw[0].ch)
+					{
+						printf("%d号车已在便道不要重复输入\n",cw[0].ch);
+						g++;
+					}
+					h++;
+				}
+				if(g==0)
+				{
+					p1->xyg=p;
+					p->xyg=NULL;
+					printf("停车场已满%d号车停在便道第%d辆\n",cw[0].ch,h);
+				}
+			}				
+		}
+			
+	}
+	if(strcmp(&cw[0].jc,"c")==0)//出
+	{
+		for(i=1;i<=z;i++)
+		{
+			if(cw[i].ch==cw[0].ch&&g==0)
+			{
+				if(cw[0].sj-cw[i].sj>=0)
+					printf("%d号车停了%d小时花费%d元\n",cw[0].ch,cw[0].sj-cw[i].sj,(cw[0].sj-cw[i].sj)*2);
+				else
+					printf("%d号车停了%d小时花费%d元\n",cw[0].ch,24+(cw[0].sj-cw[i].sj),(24+(cw[0].sj-cw[i].sj))*2);
+				if(head->xyg!=NULL)
+				{
+					p1=head->xyg;
+					cw[i].ch=p1->ch;
+					cw[i].sj=cw[0].sj;
+					head->xyg=p1->xyg;
+					free(p1);
+					printf("%d号车停在%d车位\n",cw[i].ch,i);
+				}
+				else
+				{
+					cw[i].yw=0;
+					g++;
+				}
+
+			}
+			else
+				h++;
+		}
+		if(h==z&&g==0)
+		{
+			h=1;
+			p1=head;
+			p=p1->xyg;
+			while(p->xyg!=NULL||p->ch!=cw[0].ch)
+			{
+				p=p->xyg;
+				p1=p1->xyg;
+				h++;
+			}
+			if(p->xyg==NULL&&p->ch!=cw[0].ch)
+				printf("停车场和便道没有%d号车",cw[0].ch);
+			else
+			{
+				p1->xyg=p->xyg;
+				free(p);
+				printf("%d号车停在便道离开不收费\n",cw[0].ch);
+			}	
+		}
+	}
+}
+ 
+void zt(jgt *head,int z)//停车场和便道的状态 
+{
+	int i,n=0;
+	jgt *p;
+	for(i=1;i<=z;i++)
+		if(cw[i].yw==1)
+			n++;
+	if(n<z)
+	{
+		printf("停车场停有%d辆车",n);
+		if(n>0)
+		{
+			printf("车位是:");
+			for(i=1;i<=z;i++)
+				if(cw[i].yw==1)
+					printf("%d号 ",i);
+			printf("\n");
+		}
+		printf("空闲车位%d个",z-n);
+		if(z-n>0)
+		{
+			printf("车位号是:");
+			for(i=1;i<=z;i++)
+				if(cw[i].yw==0)
+					printf("%d号 ",i);
+			printf("\n");
+		}
+	}
+	if(n==z)
+	{
+		p=head;
+		while(p->xyg!=NULL)
+		{
+			p=p->xyg;
+			if(p->yw==1)
+				n++;
+		}
+		if(n==z)
+		{
+			printf("停车场已满便道无车\n");
+		}
+		if(n>z)
+		{
+			printf("停车场已满\n");
+			printf("便道停有%d辆车\n",n-z);
+		}
+	}
+
+}
+
+void kx(int z)//空闲车位
+{
+	int i,n=0;
+	for(i=1;i<=z;i++)
+		if(cw[i].yw==1)
+			n++;
+	if(n<z)
+	{
+		printf("空闲车位有:");
+		for(i=1;i<=z;i++)
+			if(cw[i].yw==0)
+				printf("%d号 ",i);
+		printf("\n");
+	}
+	if(n==z)
+		printf("停车场已满无空闲车位\n");
+}
+int main()
+{
+    int a,s=0,n,i,z;
+    jgt  *A;
+    printf("                        ************************************************\n");
+    printf("                        *                   停车场                     *\n");
+    printf("                        *               1.创建停车场系统。             *\n");
+    printf("                        *               2.输入模拟汽车的进出           *\n");
+    printf("                        *               3.停车场和便道的状态           *\n");
+    printf("                        *               4.空闲车位                     *\n");
+    printf("                        *               5.结束程序                     *\n");
+	printf("                        *               6.查看菜单                     *\n");
+    printf("                        ************************************************\n");
+    printf("                         注释：1.按（1——6）选择功能\n");
+	printf("                               2.价格:1小时2元  \n");
+	printf("                               3.格式：(进入j/离开c 车号 进入时刻/离开时刻)\n");
+	printf("                                 如:j 1 5,c 1 10逗号是英文格式\n");
+	printf("                                 进入会显示停车位置，离开会显示费用和时间\n");
+	printf("请输入车位个数:");
+	scanf("%d",&z);
+	for(i=0;i<=z;i++)
+		cw[i].yw=0;
+    while(1==1)
+    {
+		printf("**********************************************************\n");
+		printf("功能:");
+        scanf("%d",&a);
+        if(a==1)
+        {
+            A=csh();
+            if(A!=NULL)
+			{
+                printf("创建成功\n");
+			}
+        }
+        if(a==2)
+		{
+			printf("车辆进出总数:");
+			scanf("%d",&n);
+			getchar();
+			printf("数据在同一行一起输入\n");
+			printf("请输入数据:");
+			for(i=0;i<n;i++)
+			{
+				sr(A,z);
+			}
+		}
+       if(a==3)
+		{
+		   zt(A,z);
+		}
+        if(a==4)
+		{
+			kx(z);
+		}
+        if(a==5)
+            break;
+		if(a==6)
+		{
+			    printf("                        ************************************************\n");
+				printf("                        *                   停车场                     *\n");
+				printf("                        *               1.创建停车场系统。             *\n");
+				printf("                        *               2.输入模拟汽车的进出           *\n");
+				printf("                        *               3.停车场和便道的状态           *\n");
+				printf("                        *               4.空闲车位                     *\n");
+				printf("                        *               5.结束程序                     *\n");
+				printf("                        *               6.查看菜单                     *\n");
+				printf("                        ************************************************\n");
+				printf("                         注释：1.按（1——6）选择功能\n");
+				printf("                               2.价格:1小时2元  \n");
+				printf("                               3.格式：(进入j/离开c 车号 进入时刻/离开时刻)\n");
+				printf("                                 如:j 1 5,c 1 10逗号是英文格式\n");
+				printf("                                 进入会显示停车位置，离开会显示费用和时间\n");
+		}
+    }
+    return 0;
+}

@@ -1,0 +1,215 @@
+/*Description
+主函数定义一个二维数组，从键盘输入3个人的成绩（每人四科），由search()函数找出所有分数中最高分的地址，然后由主函数输出这个最高分。
+下面是主函数框架，请编写被调函数并完善主函数。
+int main()
+{
+       ____________________;    //声明被调函数
+       int score[3][4], i, j;
+       int *p;
+       for(i=0; i<=2; i++)
+            for(j=0; j<=3; j++)
+                   scanf("%d",&score[i][j]);
+       ____________________;   //调用search（）函数
+       printf("%d\n", *p);
+       for(i=0; i<=2; i++)              //输出数组的原始数据 
+             for(j=0; j<=3; j++)
+                    printf("%3d",score[i][j]);
+       return 0;
+}
+或者用下面这个主函数：(请认真理解此段代码，学会把二维数组当成一维数组处理)
+int main()
+{
+       ____________________; //声明被调函数
+       int score[3][4], i;
+       int *p=score[0];
+       for(i=0; i<=11; i++)
+                scanf("%d", p+i );
+       ____________________; //调用search（）函数
+     printf(“%d\n”, *p);
+       for(i=0; i<=11; i++)              //输出数组的原始数据 
+                printf("%3d",*(score[0]+i)); 
+       return 0;
+}
+注意：上面的主函数，除了需要填写的两处之外，其余代码不允许做任何修改，也不能加任何代码。
+nput
+输入12个整数(不超过99)
+Output
+输出最高分及数组的原始数据
+Sample Input
+34 56 78 12 98 67 76 87 78 60 59 70
+Sample Output
+98
+ 34 56 78 12 98 67 76 87 78 60 59 70*/
+#include<stdio.h>
+int main()
+{
+       int *search(int **); //声明被调函数
+       int score[3][4], i;
+       int *p=score[0];
+       for(i=0;i<=11;i++)
+                scanf("%d", p+i);
+       p=search(&p); //调用search（）函数
+       printf("%d\n", *p);
+       for(i=0; i<=11; i++)              //输出数组的原始数据 
+                printf("%3d",*(score[0]+i)); 
+       return 0;
+}
+int *search(int **pp)
+{
+	int i,max,*f;
+	max=**pp;
+	f=*pp;
+	for(i=0;i<=11;i++)
+	{
+		if(*(*pp+i)>=max)
+		{
+			max=*(*pp+i);
+			f=*pp+i;
+		}
+	}
+	return f;
+}
+---------------------------------------------------------------------------------------------------------
+/*Description
+键盘输入两个整数，按从大到小的顺序输出。主函数如下，请编写被调函数。
+说明：
+只需要编写被调函数即可，系统会自动在您提交代码的后面，加上下面的主函数
+int  main()
+{
+       int  a[2];
+       int *p[2]={&a[0], &a[1]};
+       scanf("%d%d",&a[0], &a[1]);  //或者 scanf("%d%d", p[0], p[1]);
+       sub(p);
+       printf("%d,%d\n", *p[0],*p[1]); //从大到小输出两个数
+       printf("%d,%d\n", a[0], a[1]);  //输出原来输入的两个值，不得交换
+       return 0;
+}
+Input
+输入两个整数
+Output
+先按大小顺序输出两个整数
+再按原来的输入顺序，输出两个整数
+Sample Input
+12 34
+Sample Output
+34,12
+12,34*/
+#include<stdio.h>
+void sub(int **pp)
+{
+	int m,*q;
+	if(**(pp+1)>**pp)
+	{
+		q=*pp;
+		*pp=*(pp+1);
+		*(pp+1)=q;
+	}
+}
+int  main()
+{
+       int  a[2];
+       int *p[2]={&a[0], &a[1]};
+       scanf("%d%d",&a[0], &a[1]);  //或者 scanf("%d%d", p[0], p[1]);
+       sub(p);
+       printf("%d,%d\n", *p[0],*p[1]); //从大到小输出两个数
+       printf("%d,%d\n", a[0], a[1]);  //输出原来输入的两个值，不得交换
+       return 0;
+}
+------------------------------------------------------------------------------------------------
+/*Description
+主函数输入三个字符串，由被调函数处理后，主函数按先长后短的顺序输出它们(输入的字符串长度均不相同)。
+主函数已有，代码如下。这些代码会自动添加到你提交的代码之后。
+请编写被调函数。
+int main()
+{
+    char s[5][20],*pa[5]={s[0],s[1],s[2],s[3],s[4]};
+    int i;
+    for(i=0;i<=4;i++)
+        gets(s[i]);
+    sub(pa);    
+    for(i=0;i<=4;i++)
+        printf("%s\n",pa[i]);
+    return 0;
+}
+Input
+输入5个字符串，长度各不相同
+Output
+输出排序后的字符串，先长后短
+Sample Input
+abc
+1234
+z
+abcdefg
+xy
+Sample Output
+abcdefg
+1234
+abc
+xy
+z*/
+#include<stdio.h>
+#include<string.h>
+void sub(char **pp)
+{
+	int i,j,n;
+	char q[20]={0},t[20]={0};
+	for(i=0;i<=4;i++)
+		for(j=0;j<=3;j++)
+		{
+			if(strlen(*(pp+j))<strlen(*(pp+(j+1))))
+			{
+				strcpy(q,*(pp+j));
+				strcpy(*(pp+j),t);
+				strcpy(*(pp+j),*(pp+j+1));
+				strcpy(*(pp+j+1),t);
+				strcpy(*(pp+j+1),q);
+				strcpy(q,t);
+			}
+		}
+}
+int main()
+{
+    char s[5][20],*pa[5]={s[0],s[1],s[2],s[3],s[4]};
+    int i;
+    for(i=0;i<=4;i++)
+        gets(s[i]);
+    sub(pa);    
+    for(i=0;i<=4;i++)
+        printf("%s\n",pa[i]);
+    return 0;
+}
+-------------------------------------------
+#include<stdio.h>
+#include<string.h>
+void sub(char **p)
+{
+    char *q;
+    int i,j,k;
+   
+    for(i=0;i<4;i++)
+    { 
+        k=i;
+        
+       
+            for(j=i+1;j<5;j++)
+            {
+                if(strlen(*(p+k))<strlen(*(p+j)))
+                    k=j;
+            }
+           q=*(p+i);
+           *(p+i)=*(p+k);
+           *(p+k)=q;
+    }
+
+}
+int main()
+{
+    char s[5][20],*pa[5]={s[0],s[1],s[2],s[3],s[4]};
+    int i;
+    for(i=0;i<=4;i++)
+        gets(s[i]);
+    sub(pa);    
+    for(i=0;i<=4;i++)
+        printf("%s\n",pa[i]);
+    return 0;
+}

@@ -1,0 +1,232 @@
+/*Description
+某小组5人，每人三项数据：姓名、年龄、分数，键盘输入这些人的数据，求小组的平均分及成绩最高者的数据
+
+说明：年龄和分数都是整数
+
+Input
+键盘输入5个人的数据
+
+Output
+输出平均分及成绩最高者的数据
+
+注：后台数据可以保证平均分是一个整数，没有小数
+
+Sample Input
+aaa  18  90
+bbb  19  80
+ccc  19  80
+ddd  18  60
+eee  18  70
+Sample Output
+76
+aaa,18,90*/
+#include<stdio.h>
+struct k
+{
+	char m[9];
+	int n;
+	int f;
+};
+int main()
+{
+	struct k a[5];
+	int i,max=0,pj,h=0;
+	for(i=0;i<=4;i++)
+	{
+		scanf("%s %d %d",a[i].m,&a[i].n,&a[i].f);
+	}
+	for(i=0;i<=4;i++)
+	{
+		if(a[i].f>a[max].f)
+			max=i;
+		h+=a[i].f;
+	}
+	pj=h/5;
+	printf("%d\n",pj);
+	printf("%s,%d,%d\n",a[max].m,a[max].n,a[max].f);
+	return 0;
+}
+------------------------------------------------------------------------------
+/*Description
+主函数中输入10个学生的数据，每个人都包括三项基本资料：学号，生日，分数（整数），请在被调函数中按照分数由高到低的顺序将每个人的资料排列输出。
+
+要求：
+
+（1）生日也要定义成结构体。
+
+（2）被调函数完成排序和输出
+
+Input
+10个学生的数据，每人一行
+
+Output
+输出排序后的数据，每人一行
+
+Sample Input
+5 1990 10 1 86
+3 1992 1 5 90
+8 1991 3 1 70
+9 1990 5 5 65
+1 1991 6 22 89
+4 1992 12 31 77
+2 1990 1 1 87
+6 1989 6 6 92
+10 1990 8 1 88
+7 1992 3 9 82
+Sample Output
+6,1989/6/6,92
+3,1992/1/5,90
+1,1991/6/22,89
+10,1990/8/1,88
+2,1990/1/1,87
+5,1990/10/1,86
+7,1992/3/9,82
+4,1992/12/31,77
+8,1991/3/1,70
+9,1990/5/5,65*/
+#include<stdio.h>
+struct sr
+{
+	int n;
+	int y;
+	int r;
+};
+struct xs
+{
+	int xh;
+	struct sr rq;
+	int fs;
+};
+void bd(struct xs *p)
+{
+	int i,j,max=p[0].fs,k;
+	struct xs t;
+	for(i=0;i<=9;i++)
+	{
+		k=i;
+		for(j=i+1;j<=9;j++)
+			if(p[j].fs>p[k].fs)
+				k=j;
+		t=p[i];
+		p[i]=p[k];
+		p[k]=t;
+	}
+	for(i=0;i<=9;i++)
+	{
+		printf("%d,%d/%d/%d,%d\n",p[i].xh,p[i].rq.n,p[i].rq.y,p[i].rq.r,p[i].fs);
+	}
+}
+int main()
+{
+	struct xs a[10];
+	int i;
+	for(i=0;i<=9;i++)
+	{
+		scanf("%d %d %d %d %d",&a[i].xh,&a[i].rq.n,&a[i].rq.y,&a[i].rq.r,&a[i].fs);
+	}
+	bd(a);
+	return 0;
+}
+------------------------------------------------------------------------------
+/*Description
+写两个函数：
+
+1、一个函数中输入10个学生的数据，每个人都包括三项基本资料：学号，生日，分数（整数）。
+
+2、另一个函数可以按照分数由高到低的顺序将每个人的资料排列输出。
+
+主函数已在后台，提交时会自动添加在你的代码之后。
+
+主函数如下：
+
+int main()
+
+{
+
+       struct student s[10];
+
+       input(s,10);
+
+       sort(s,10);
+
+       return 0;
+
+}
+
+请编写所需代码。
+
+Input
+10个学生的数据，每人一行
+
+Output
+输出排序后的数据，每人一行
+
+Sample Input
+5 1990 10 1 86
+3 1992 1 5 90
+8 1991 3 1 70
+9 1990 5 5 65
+1 1991 6 22 89
+4 1992 12 31 77
+2 1990 1 1 87
+6 1989 6 6 92
+10 1990 8 1 88
+7 1992 3 9 82
+Sample Output
+6,1989/6/6,92
+3,1992/1/5,90
+1,1991/6/22,89
+10,1990/8/1,88
+2,1990/1/1,87
+5,1990/10/1,86
+7,1992/3/9,82
+4,1992/12/31,77
+8,1991/3/1,70
+9,1990/5/5,65*/
+#include<stdio.h>
+struct sr
+{
+	int n;
+	int y;
+	int r;
+};
+struct student
+{
+	int xh;
+	struct sr rq;
+	int fs;
+};
+void input(struct student *p,int s)
+{
+	int i;
+	for(i=0;i<s;i++)
+	{
+		scanf("%d %d %d %d %d",&p[i].xh,&p[i].rq.n,&p[i].rq.y,&p[i].rq.r,&p[i].fs);
+	}
+}
+void sort(struct student *p,int s)
+{
+	int i,j,max=p[0].fs,k;
+	struct student t;
+	for(i=0;i<s;i++)
+	{
+		k=i;
+		for(j=i+1;j<s;j++)
+			if(p[j].fs>p[k].fs)
+				k=j;
+		t=p[i];
+		p[i]=p[k];
+		p[k]=t;
+	}
+	for(i=0;i<s;i++)
+	{
+		printf("%d,%d/%d/%d,%d\n",p[i].xh,p[i].rq.n,p[i].rq.y,p[i].rq.r,p[i].fs);
+	}
+}
+int main()
+{
+       struct student s[10];
+       input(s,10);
+       sort(s,10);
+       return 0;
+}

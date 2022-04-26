@@ -1,0 +1,324 @@
+#include <stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define zd 100 
+#define INF 1000000        
+//***************************************************
+typedef struct        
+{
+    char bq[zd]; 
+	char jj[zd];        
+} BQ;
+typedef struct
+{
+    BQ dd[zd];            
+    int dds,bs;               
+} ALGraph;
+int dist[zd][zd],path[zd][zd];
+int qz[zd][zd]={0};//边的权值
+int Stack[zd];//路径栈
+int visited[zd];//标记数组
+int top=0;
+int counts;//记录路径数
+//***************************************************
+void CreateALGraph(ALGraph *G,int a,int b)//建立邻接表（a顶点数，b边数）
+{
+	int i,j;
+	G->bs=b;
+	G->dds=a;
+	strcpy(G->dd[1].bq,"12号楼");//存入地图信息
+	strcpy(G->dd[1].jj,"男生宿舍");
+	strcpy(G->dd[2].bq,"11号楼");
+	strcpy(G->dd[2].jj,"男生宿舍");
+	strcpy(G->dd[3].bq,"10号楼");
+	strcpy(G->dd[3].jj,"男生宿舍");
+	strcpy(G->dd[4].bq,"研究生宿舍");
+	strcpy(G->dd[4].jj,"男女生宿舍");
+	strcpy(G->dd[5].bq,"实验楼");
+	strcpy(G->dd[5].jj,"新建楼，主要供计科院和信电院使用");
+	strcpy(G->dd[6].bq,"17、18、19、20号楼");
+	strcpy(G->dd[6].jj,"女生宿舍区");
+	strcpy(G->dd[7].bq,"教职工宿舍区");
+	strcpy(G->dd[7].jj,"学校老师职工居住区，风景好环境优越");
+	strcpy(G->dd[8].bq,"食堂、超市");
+	strcpy(G->dd[8].jj,"西校师生用餐区");
+	strcpy(G->dd[10].bq,"操场、球场");
+	strcpy(G->dd[10].jj,"包含操场、篮球场、网球场、排球场，是学生们运动主要的场所");
+	strcpy(G->dd[9].bq,"西校区湖");
+	strcpy(G->dd[9].jj,"山东工商学院最大的湖，有鱼、鸭、乌龟等等");
+	strcpy(G->dd[11].bq,"图书馆、女生宿舍");
+	strcpy(G->dd[11].jj,"一二楼主要是图书馆、往上时女生宿舍");
+	strcpy(G->dd[12].bq,"创业中心");
+	strcpy(G->dd[12].jj,"学生进行创新创业的地方");
+	strcpy(G->dd[13].bq,"逸夫楼");
+	strcpy(G->dd[13].jj,"学生上课学习的地方，包含一教’二教、三教三个教学区域");
+	strcpy(G->dd[14].bq,"西校区南门");
+	strcpy(G->dd[14].jj,"西校区主门");
+	strcpy(G->dd[15].bq,"西校区东门");
+	strcpy(G->dd[15].jj,"新建暂时为投入使用");
+
+	for(i=0;i<=G->dds;i++)
+	{
+    	for(j=0;j<=G->dds;j++)
+		{
+    		qz[i][j]=INF;
+		}
+	}
+	qz[1][2]=qz[2][1]=60;//存入权值
+	qz[2][3]=qz[3][2]=60;
+	qz[3][4]=qz[4][3]=20;
+	qz[2][4]=qz[4][2]=30;
+	qz[3][5]=qz[5][3]=80;
+	qz[4][5]=qz[5][4]=80;
+	qz[5][15]=qz[15][5]=100;
+	qz[5][13]=qz[13][5]=150;
+	qz[4][9]=qz[9][4]=150;
+	qz[4][8]=qz[8][4]=170;
+	qz[15][13]=qz[13][15]=100;
+	qz[13][9]=qz[9][13]=90;
+	qz[13][14]=qz[14][13]=70;
+	qz[9][14]=qz[14][9]=90;
+	qz[9][12]=qz[12][9]=90;
+	qz[12][14]=qz[14][12]=30;
+	qz[9][8]=qz[8][9]=70;
+	qz[9][10]=qz[10][9]=70;
+	qz[8][10]=qz[10][8]=10;
+	qz[10][11]=qz[11][10]=60;
+	qz[11][12]=qz[12][11]=10;
+	qz[8][6]=qz[6][8]=30;
+	qz[6][7]=qz[7][6]=10;
+	qz[8][7]=qz[7][8]=50;
+}
+//*************************************************** 
+void ck(ALGraph G)//景点信息查询 
+{
+    int i;
+    for (i=1; i<=G.dds; i++)
+    {
+		printf("(%d)%s\n简介:%s\n",i,G.dd[i].bq,G.dd[i].jj);
+    }
+}
+//***************************************************
+void sccd(ALGraph *G,int s, int e)
+{
+    if(path[s][e]==-1||path[s][e]==e||path[s][e]==s)//递归终止条件
+    {
+        return;
+    }
+    else
+    {
+        sccd(G,s,path[s][e]);//将中间点作为终点继续打印路径
+        printf("%s->",G->dd[path[s][e]].bq);//打印中间景点名字
+        sccd(G,path[s][e],e);//将中间点作为起点继续打印路径
+    }
+}
+//***************************************************  
+void dijkstra(ALGraph G,int s,int b)//s为起点到达各点得最短路径长度
+{
+    int i,j,k;
+    for(i=1;i<=G.dds;i++) //初始化距离与路径矩阵
+    {
+        for(j=1;j<=G.dds;j++)
+        {
+            dist[i][j]=qz[i][j];
+            if(i!=j&&dist[i][j]<INF)
+                path[i][j]=i;
+            else
+                path[i][j]=-1;//-1代表不可达
+        }
+    }
+    for(k=1; k<=G.dds; k++)
+        for(i=1; i<=G.dds; i++)
+            for(j=1; j<=G.dds; j++)
+                if(dist[i][j]>(dist[i][k]+dist[k][j]))
+                {
+                    dist[i][j]=dist[i][k]+dist[k][j];//更新
+                    path[i][j]=k;         //path用于记录最短路径上的结点*/
+                }
+ 
+}
+//*************************************************** 
+void djdfw(ALGraph *G)
+{
+    int vNum[zd]= {0};
+    int i,j,dis;
+    j=1;
+    dis=0;//统计全程总长
+    printf("输入要游览的景点编号(每次输入一个,-1结束):");
+    scanf("%d",&vNum[j-1]);
+    while(vNum[j-1]!=-1&&j<10)
+    {
+		j=j+1;
+        printf("输入要游览的景点编号(每次输入一个,-1结束):");
+        scanf("%d", &vNum[j-1]);
+        if(vNum[j-1]==-1)
+        {
+            break;
+        }
+    }
+    printf("多景点间访问路线:");
+    for(i=0; vNum[i]>0&&vNum[i+1]>0; i++)
+    {
+        printf("%s->",G->dd[vNum[i]].bq);//输出路径上的起点
+        sccd(G,vNum[i],vNum[i+1]);//利用费洛依德算法
+        dis+=dist[vNum[i]][vNum[i+1]];
+    }
+    printf("%s\n",G->dd[vNum[j-2]].bq);//*输出路径上的终点*/
+    printf("全程：%dm\n",dis);
+}
+//*************************************************** 
+void Dfs_allpath(ALGraph *G,int s,int e)
+{
+	int dis=0;
+    int i,j;
+    Stack[top]=s;
+    top++;  //起点入栈
+    visited[s]=1;//标记入栈
+    for(i=0; i<G->dds; i++)
+    {
+        if(qz[s][i]>0&&qz[s][i]!=INF&&!visited[i])
+        {
+            //表明两点可达且未被访问
+            if(i==e)//DFS到了终点，打印路径
+            {
+                printf("第%d条路:",counts++);
+                for(j=0; j<top; j++)
+                {
+                    printf("%s->",G->dd[Stack[j]].bq);
+                    if(j<top-1)//统计路径长度
+                    {
+                        dis=dis+qz[Stack[j]][Stack[j+1]];
+                    }
+                }
+                dis=dis+qz[Stack[top-1]][e];
+                printf("%s\n",G->dd[e].bq);//打印终点
+                printf("总长度是：%dm\n\n",dis);
+            }
+            else//不是终点接着Dfs
+            {
+                Dfs_allpath(G,i,e);
+                top--;//支路全被访问一遍,顶点出栈
+                visited[i]=0;//出栈点标记为已出栈，允许下次访问
+            }
+        }
+    }
+}
+
+//***************************************************
+void dt()
+{  
+    printf("                            山东工商学院西校区地图                            \n");
+	printf("                                                                              \n");
+	printf("  |------------------------------------------------------------------------|  \n");
+	printf("  |  |            |  - |           |  ------   |          |          ||   |  \n");
+    printf("  |  | 1.12号楼   |    |2. 11号楼  |           | 3.10号楼 |          ||   |  \n");
+    printf("  |   ------------      ------------             -----------         ||   |  \n");
+	printf("  |                    ||                                            ||   |  \n");
+	printf("  |                    \\      | -----------|    |------------------| ||   |  \n");
+	printf("  |                     \\     |4.研究生宿舍|    |   5.实验楼       | ||   |  \n");
+	printf("  |                      \\    -----------       |                  | ||   |  \n");
+	printf("  |                       \\       //            |                  | ||   |  \n");
+	printf("  |                        \\    //              |------------------| ||   |  \n");
+	printf("  |  ---------  ||           ||                            \\         ||   |  \n");
+	printf("  | 6|17 18 19| ||           ||     |-----------------|     \\        ||   |15\n");
+	printf("  |  | 20号楼 | ||  -------  ||     |                 |      ||      ||   --西\n");
+	printf("  |  ---------  || | 8食堂 | ||     | 9西校区湖       |      ||        ---- 校\n");
+	printf("  |             || |  超市 | ||     |                 |      ||        ---- 区\n");
+	printf("  |             ||  -------  \\      |-----------------|       ||         -- 东\n");
+	printf("  |  --------   ||     ------  \\                           //        ||  |  门\n");
+	printf("  |  |7.教职工| ||    | 10   |   \\                        //         ||  |  \n");
+	printf("  |  | 宿舍区 | ||    | 操场 |      \\                    //          ||  |  \n");
+	printf("  |  ---------  ||    | 球场 |        \\             |--------------| ||  |  \n");
+	printf("  |             ||     ------     ------ \\          |              | ||  |  \n");
+	printf("  |             ||               |  球场 |  \\       |              | ||  |  \n");
+	printf("  |             || ---------------------------||    |              | ||  |  \n");
+	printf("  |             \\ --------------------------  ||    |  13逸夫楼    | ||  |  \n");
+	printf("  |               \\                           ||    |              | ||  |  \n");
+	printf("  |                \\  --------- |  -----------||    |              | ||  |  \n");
+	printf("  |                  \\11图书馆  | |12创业中心 ||    |              | ||  |  \n");
+	printf("  |                   \\ 女生宿舍|  ---------- ||    |--------------| ||  |  \n");
+	printf("  |                      \\ -------------------    --------------------||  |  \n");
+	printf("  |-------------------------------------------|    |-----------------------|  \n");                                                    
+	printf("                                            *14西校区南门                     \n");
+	printf("   注释:|| 表示路                                                             \n");
+
+}
+//***************************************************
+void cd()
+{
+	printf("                        *****************************************************\n");
+    printf("                        *           山东工商学院西校区导游咨询系统          *\n");
+    printf("                        *               1.查看菜单                          *\n");
+	printf("                        *               2.查看地图                          *\n");
+    printf("                        *               3.景点信息查询                      *\n");
+    printf("                        *               4.两景点之间最短路查询              *\n");
+    printf("                        *               5.两景点间所有路径查询              *\n");
+	printf("                        *               6.多景点间访问路线查询              *\n");
+	printf("                        *               7.退出系统                          *\n");
+    printf("                        *****************************************************\n");
+    printf("                         注释：1.按（1——7）选择功能\n");
+}
+
+//***************************************************
+int main()
+{
+    ALGraph G;
+	int a=15,b=24,c,i,j;
+	cd();
+	CreateALGraph(&G,a,b);
+	while(1)
+	{
+		printf("*****************************************\n");
+		printf("功能:");
+		scanf("%d",&c);
+		if(c==1)
+		{
+			cd();	
+		}
+		if(c==2)
+		{
+			dt();
+		}
+		if(c==3)
+		{
+			ck(G);
+		}
+		if(c==4)
+		{
+			printf("请输入要查询的顶点号(如:1 4):");
+			scanf("%d %d",&a,&b);
+			if(a!=b)
+				dijkstra(G,a,b);
+			else
+				printf("从%d到%d最短距离是0m\n",a,b);
+			printf("从%d到%d最短距离是%dm\n",a,b,dist[a][b]);	
+			printf("%s->",G.dd[a].bq);
+			sccd(&G,a,b);
+			printf("%s\n",G.dd[b].bq);
+		}
+		if(c==5)
+		{
+			printf("请输入起点、终点的景点编号数字:");
+            scanf("%d %d",&a,&b);
+            Dfs_allpath(&G,a,b);
+			top=0;
+			 for(i=0;i<zd;i++)
+				 Stack[i]=0;
+			 for(i=0;i<zd;i++)
+				 visited[i]=0;
+			 dijkstra(G,a,b);
+             printf("从%s到%s最短距离是：%dm\n",G.dd[a].bq,G.dd[b].bq,dist[a][b]);
+             printf("%s->",G.dd[a].bq);
+             sccd(&G,a,b);
+             printf("%s\n",G.dd[b].bq);
+		}
+		if(c==6)
+		{
+			dijkstra(G,a,b);
+			djdfw(&G);
+		}
+		if(c==7)
+			break;
+	}	
+    return 0;  
+}

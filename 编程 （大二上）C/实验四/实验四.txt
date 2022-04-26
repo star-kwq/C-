@@ -1,0 +1,255 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define MaxSize 100
+typedef struct w 
+{
+	char data;
+	struct w * zhz;
+	struct w * yhz;
+}jgt;
+typedef jgt * QelemType;
+typedef struct
+{
+    QelemType num[MaxSize];
+    int front;
+    int rear;
+} Queue;
+Queue Q;
+jgt * jl()//功能一 先序建立二叉树
+{
+	jgt *b=NULL;
+	char c;
+	c=getchar();
+	if(c!='#')
+	{
+		b=(jgt *)malloc(sizeof(jgt));
+		b->data=c;
+		b->zhz=jl();
+		b->yhz=jl();
+	}
+	return b;
+}
+
+void xx(jgt * b)//先序
+{
+	if(b!=NULL)
+	{
+		printf("%c",b->data);
+		xx(b->zhz);
+		xx(b->yhz);
+	}
+}
+void zx(jgt * b)//中序
+{
+	if(b!=NULL)
+	{
+		zx(b->zhz);
+		printf("%c",b->data);
+		zx(b->yhz);
+	}
+}
+void hx(jgt * b)//后序
+{
+	if(b!=NULL)
+	{
+		hx(b->zhz);
+		hx(b->yhz);
+		printf("%c",b->data);
+	}
+}
+void initilize()   ///初始化队列
+{
+    Q.front = 0;
+    Q.rear = 0;
+}
+
+int Push(jgt *T)   ///入队
+{
+    if((Q.rear+1)==Q.front)
+        return 0;
+    else
+        Q.num[++Q.rear] = T;
+    return 1;
+}
+int Empty()   ///判断对列是否为空
+{
+    if(Q.front==Q.rear)
+        return 1;
+    else
+        return 0;
+}
+jgt *Pop()  ///出队
+{
+    if(Q.front==Q.rear)
+        return 0;
+    return Q.num[++Q.front];
+}
+void cc(jgt *T)///层次遍历
+{
+    jgt *temp;
+    if(!T)
+        return;
+    Push(T);
+    while (!Empty())
+    {
+        temp = Pop();
+        printf("%c ", temp->data);  
+        if(temp->zhz)     
+            Push(temp->zhz);
+        if(temp->yhz)   
+            Push(temp->yhz);
+    }
+}
+
+int sd(jgt * b)//深度
+{
+	int l,r;
+	if(!b)
+		return 0;
+	else
+	{
+		l=sd(b->zhz);
+		r=sd(b->yhz);
+		if(l>=r)
+			return l+1;
+		else
+			return r+1;
+	}
+}
+
+void zyjd(jgt *b,int * c)//子叶结点数
+{
+	if(b)
+	{
+		if((!b->zhz)&&(!b->yhz))
+			(*c)++;
+		zyjd(b->zhz,c);
+		zyjd(b->yhz,c);
+	}
+}
+
+int  jh(jgt *b) // 交换
+{    
+	jgt *temp;
+    if(!b)
+        return 0;
+    if(b->zhz == NULL && b->yhz == NULL)
+        return 0;
+    else
+    {
+        temp = b->zhz;
+        b->zhz = b->yhz;
+        b->yhz = temp;
+    }
+    if(b->zhz)
+        jh(b->zhz);
+    if(b->yhz)
+        jh(b->yhz);
+    return 1;
+ }
+
+
+
+jgt*  xdsd(jgt *b,char x)//x的深度
+{
+	jgt * d;
+	if(!b) return NULL;
+    if(b->data==x) 
+	  return b;
+	 d=xdsd(b->zhz,x);
+	if(d)
+		 return d;
+	d=xdsd(b->yhz,x);
+    if(d)  
+		return d;
+	else  return  NULL;
+}
+int main()
+{
+	jgt * b;
+	int a,s,c=0;
+	char x;
+    printf("                        *****************************************************\n");
+    printf("                        *                   二叉树的建立与应用              *\n");
+    printf("                        *               1.先序构造二叉树                    *\n");
+    printf("                        *               2.先序、中序、后序、层次遍历序列    *\n");
+    printf("                        *               3.求二叉树的深度。                  *\n");
+    printf("                        *               4.求叶子结点的个数。                *\n");
+	printf("                        *               5.左右子树交换位置                  *\n");
+	printf("                        *               6.X为根的子树的深度                 *\n");
+    printf("                        *               7.结束程序                          *\n");
+	printf("                        *               8.查看菜单                          *\n");
+    printf("                        *****************************************************\n");
+    printf("                         注释：1.按（1——8）选择功能\n");
+    while(1==1)
+    {
+		printf("**********************************************************\n");
+		printf("功能:");
+        scanf("%d",&a);
+        if(a==1)
+        {
+			getchar();
+			printf("请输入：");
+            b=jl();
+        }
+        if(a==2)
+		{
+			printf("先序输出为：");
+			xx(b);
+			printf("\n");
+			printf("中序序列为：");
+			zx(b);
+			printf("\n");
+			printf("后序序列为：");
+			hx(b);
+			printf("\n");
+			printf("层次遍历输出为：");
+			initilize();
+			cc(b);
+			printf("\n");
+		}
+        if(a==3)
+		{
+			s=sd(b);
+			printf("深度为：%d\n",s);
+		}
+        if(a==4)
+		{
+			zyjd(b,&c);
+			printf("叶子结点个数为：%d\n",c);
+		}
+		if(a==5)
+		{
+			s=jh(b);
+			if(s=0)
+				printf("交换失败\n");
+			else
+				printf("交换完成\n");
+		}
+        if(a==6)
+		{
+			printf("要查找的结点字符：");
+			getchar();
+			scanf("%c",&x);
+			printf("%c为根的子树的深度%d\n",x,sd(xdsd(b,x)));
+		}
+        if(a==7)
+            break;
+		if(a==8)
+		{
+			printf("                        *****************************************************\n");
+			printf("                        *                   二叉树的建立与应用              *\n");
+			printf("                        *               1.先序构造二叉树                    *\n");
+			printf("                        *               2.先序、中序、后序、层次遍历序列    *\n");
+			printf("                        *               3.求二叉树的深度。                  *\n");
+			printf("                        *               4.求叶子结点的个数。                *\n");
+			printf("                        *               5.左右子树交换位置                  *\n");
+			printf("                        *               6.X为根的子树的深度                 *\n");
+			printf("                        *               7.结束程序                          *\n");
+			printf("                        *               8.查看菜单                          *\n");
+			printf("                        *****************************************************\n");
+			printf("                         注释：1.按（1——8）选择功能\n");
+		}
+    }
+    return 0;
+}
