@@ -1,0 +1,16 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	char p[20]={0};
+	char b[20]={0};
+	cin>>p>>b;
+	int h=3;
+	h=strcmp(p,b);
+	if(h==0)
+		cout<<"Yes"<<endl;
+	else
+		cout<<"No"<<endl;
+	return 0;
+}

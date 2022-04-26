@@ -1,0 +1,194 @@
+/*Description
+主函数框架如下面代码所示，其功能是，找出键盘输入数据的最大值和最小值，请按照程序框架编写被调函数并完善整个程序。
+
+
+要求：不得使用指针。除了填空和函数声明外，不允许改写主程序其他部分
+
+
+int main()
+
+
+{
+
+
+       int  a[10], i,  max, min;
+
+
+       for(i=0; i<=9; i++) 
+
+
+               cin>>a[i];
+
+
+       ____________________   //调用函数，将10个数据中的最大值和最小值分别存入max和min中，只填写一条语句 
+
+
+      cout<<"Max is "<<max<<",Min is "<<min<<endl;
+
+
+     return  0;
+
+
+}
+
+Input
+输入10个整数
+
+Output
+输出最大值和最小值
+
+Sample Input
+5 1 6 2 7 9 8 0 4 3
+Sample Output
+Max is 9,Min is 0*/
+#include<iostream>
+using namespace std;
+void dx(int[],int&,int&);
+int main()
+{
+
+
+       int  a[10], i,  max, min;
+
+
+       for(i=0; i<=9; i++) 
+
+
+               cin>>a[i];
+
+
+        dx(a,max,min);//调用函数，将10个数据中的最大值和最小值分别存入max和min中，只填写一条语句 
+
+
+		cout<<"Max is "<<max<<",Min is "<<min<<endl;
+
+
+		return  0;
+
+
+}
+void dx(int a[10],int &max,int &min)
+{
+	int j;
+	max = min = a[0];
+	for(j=0; j<=9; j++)
+	{
+		if(max<a[j])
+			max=a[j];
+		if(min>a[j])
+			min=a[j];
+	}
+}
+**************************************************
+/*Description
+利用new和delete，使用堆内存存储键盘输入的10个整数，并排序输出（从大到小）。
+
+Input
+输入十个整数
+
+Output
+按从大到小顺序输出10个整数
+
+Sample Input
+-5 1 6 8 2 9 4 7 -10 3
+Sample Output
+9 8 7 6 4 3 2 1 -5 -10*/
+#include<iostream>
+using namespace std;
+int main()
+{
+	int  i;
+	int *p=new int [10];
+
+
+	for(i=0; i<=9; i++) 
+
+		cin>>p[i];
+
+
+	int j,t;
+
+	for(j=0; j<=8; j++)
+		for(i=0; i<=8-j; i++)
+		{
+			if(p[i]<p[i+1])
+			{
+				t=p[i];
+				p[i]=p[i+1];
+				p[i+1]=t;
+			}
+		}
+	for(i=0; i<=9; i++) 
+		cout<<p[i]<<' ';
+
+	delete [] p;
+	return  0;
+
+}
+*************************************************************************************************
+/*Description
+下面程序生成10个整数的数组，然后根据键盘输入的三个下标，重新对三个元素赋值并输出。
+其中用到两个函数：get()和put()，无论哪个函数，若执行过程中遇到下标越界，则终止程序运行。请编写这两个函数，并完善整个程序。
+
+*/
+#include<iostream>
+#include <cstdlib>       //包含exit()函数
+
+using namespace std;
+int &put(int a[],int s)
+{
+	int &r=a[s];
+	if(s<=9&&s>=0)
+	{
+		return r;
+	}
+	else
+	{
+		cout<<"out of range"<<endl;
+		exit(1);
+	}
+	
+}
+int get(int a[],int s)
+{
+	if(s<=9&&s>=0)
+		return a[s];
+	else
+	{
+		cout<<"out of range"<<endl;
+		exit(1);
+	}
+}
+int main()
+{
+
+    int vals[10],a,b,c,i;
+
+    for(i=0; i<=9; i++)
+
+        vals[i]=i*i;   //给元素赋值
+
+    cin>>a>>b>>c;
+
+
+    put(vals,a)=a*a+1;       //让数组val[a]的值变为a*a+1
+
+
+    put(vals,b)=b*b+1;  
+
+
+    put(vals,c)=c*c+1;
+
+
+    cout<<get(vals,a)<<endl;  //输出数组val[a]的值
+
+
+    cout<<get(vals,b)<<endl;
+
+
+    cout<<get(vals,c)<<endl;
+
+
+    return 0;
+
+}

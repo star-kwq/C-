@@ -1,0 +1,175 @@
+/*
+Description
+将2820的重载运算符改写成成员函数形式
+
+Input
+输入两个时间的时分秒
+
+Output
+输出程序运行结果
+
+Sample Input
+2 20 10 2 10 5
+Sample Output
+0:10'5"
+0:10'4"
+0:10'2"
+0:10'2"
+0:10'1"
+*/
+//////////////////////////////////////////////////////////////////////
+// Time.h: interface for the Time class.
+//
+#if !defined(AFX_TIME_H__C09AC8C2_3C7B_4161_A710_68B8FBCFCE6A__INCLUDED_)
+#define AFX_TIME_H__C09AC8C2_3C7B_4161_A710_68B8FBCFCE6A__INCLUDED_
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+class Time  
+{
+public:
+	Time();
+	Time(Time&);
+	Time(int,int,int);
+	Time operator - (Time &t);
+	Time& operator -- ();
+	Time operator -- (int);
+	void disp();
+protected:
+	int h;
+	int m;
+	int s;
+
+};
+
+#endif // !defined(AFX_TIME_H__C09AC8C2_3C7B_4161_A710_68B8FBCFCE6A__INCLUDED_)
+
+//////////////////////////////////////////////////////////////////////
+// Time.cpp: implementation of the Time class.
+//
+
+//#include "Time.h"  //多文件用
+#include<iostream>
+using namespace std;
+
+Time::Time()
+{
+}
+
+Time::Time(Time& t)
+{
+	h=t.h;
+	m=t.m;
+	s=t.s;
+}
+
+Time::Time(int H,int M,int S)
+{
+	h=H;
+	m=M;
+	s=S;
+}
+
+void Time::disp()
+{
+	cout<<h<<":"<<m<<"\'"<<s<<"\""<<endl;
+}
+
+Time Time::operator-(Time &t2)
+{
+	Time t;
+	if(s-t2.s<0)
+	{
+		m-=1;
+		s+=60;
+		t.s=s-t2.s;
+	}
+	else
+		t.s=s-t2.s;
+	if(m-t2.m<0)
+	{
+		if(h-1<0)
+			h+=24;
+		h-=1;
+		m+=60;
+		t.m=m-t2.m;
+	}
+	else
+		t.m=m-t2.m;
+	if(h-1>=0)
+		t.h=h-t2.h;
+	else
+	{
+		h+=24;
+		t.h=h-t2.h;
+	}
+	
+	return t;
+}
+
+Time& Time::operator--()
+{
+	if(s==0)
+	{
+		if(m==0)
+		{
+			if(h==0)
+				h+=23;
+			else
+				h-=1;
+			m+=59;
+		}
+		else
+			m-=1;
+		s+=60;
+	}
+	s-=1;
+	return *this;
+}
+
+Time Time::operator--(int)
+{
+	Time t1(*this);
+	if(s==0)
+	{
+		if(m==0)
+		{
+			if(h==0)
+				h+=23;
+			else
+				h-=1;
+			m+=59;
+		}
+		else
+			m-=1;
+		s+=60;
+	}
+	s-=1;
+	return t1;
+}
+
+////////////////////////////////////////////
+//main.cpp
+/*
+#include<iostream>
+using namespace std;  //多文件用
+#include"Time.h"
+*/
+
+int main()      
+{   
+	int h1,m1,s1,h2,m2,s2;
+	cin>>h1>>m1>>s1>>h2>>m2>>s2;
+	Time  t1(h1,m1,s1), t2(h2,m2,s2),t;      
+	t=t1-t2;      
+	t.disp();      
+	t--;      
+	t.disp();      
+	(--t)--;      
+	t.disp(); 
+	(t--).disp();
+	t.disp();
+	return 0;    
+}

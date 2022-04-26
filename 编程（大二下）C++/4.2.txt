@@ -1,0 +1,87 @@
+/*友元，交叉调用*/
+
+//---------------------------------------------
+//Teacher.h
+
+class Teacher
+{
+public:
+	Teacher(char *p);
+    void AssignScore(class Student &p,int n); //用来修改某学生成绩
+protected:
+	char name[10];  //用来存储教师名字
+};
+
+//-----------------------------------------------
+//Student.h
+
+//#include"Teacher.h"  //这多文件用
+class Student
+{
+public:
+	Student(char *p,int j);
+	friend void Teacher::AssignScore(Student &p,int n);
+	void Disp();
+protected:
+	char name[10];
+    int score;
+};
+
+//----------------------------------------------
+//Student.cpp
+
+#include<cstring>
+#include<iostream>
+using namespace std;
+//#include"Student.h"  //这多文件用
+void Student::Disp()
+{
+	cout<<name<<","<<score<<endl;
+}
+
+Student::Student(char *p,int j)
+{
+	strcpy(name,p);
+	score=j;
+}
+
+//-------------------------------------------
+//Teacher.cpp
+
+//#include<cstring>
+//#include<iostream>  //这些多文件用
+//using namespace std;
+//#include"Teacher.h"
+//#include"Student.h"
+void Teacher::AssignScore(Student &p,int n)
+{
+	p.score=n;
+}
+
+
+Teacher::Teacher(char *p)
+{
+	strcpy(name,p);
+}
+
+
+//-------------------------------------------
+//zhu.cpp
+
+//#include<iostream>
+//using namespace std;  //这些多文件用
+//#include"Teacher.h"
+//#include"Student.h"
+int main()
+{
+
+	int n;
+	Teacher t("Wang");
+	Student s("Li",59);
+	s.Disp();
+	cin>>n;
+	t.AssignScore(s,n);//添加代码，修改学生成绩为n
+	s.Disp();
+	return 0;
+
+}

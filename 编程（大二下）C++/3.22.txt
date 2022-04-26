@@ -1,0 +1,444 @@
+/*Description
+（1）编写一个日期类Tdate，有年、月、日三个成员，生成对象时可以指定年、月、日三个参数，可以输出这个日期。     
+
+（2）编写一个Student类，成员包括学号（整数）、学生的生日（Tdate的一个对象）     
+
+     要求：     
+
+      A）每个学生在生成的时候，可以指定学号和生日
+
+      B）可以输出学生的学号及生日（生日如何输出？）    
+
+（3）每个对象构造或析构时，都要有相应的文字输出，以便验证程序的执行顺序。
+
+
+
+
+运行下面的主函数：
+
+int main()
+
+{
+
+      int  n,  y,  m,  d;
+
+      cin>>n>>y>>m>>d;
+
+      Student  s(n, y, m ,d);
+
+      s.Disp();
+
+      return 0;
+
+}
+Input
+输入四个整数，分别作为学号、出生年份、月份和日期。如：
+
+
+201  1990   10  1
+
+Output
+输出程序的运行结果，如：
+
+
+construct  Tdate
+
+
+construct  Student
+
+
+201,1990/10/1
+
+
+distruct  Student
+
+
+distruct Tdate
+
+Sample Input
+101 1991 1 1
+Sample Output
+construct Tdate
+construct Student
+101,1991/1/1
+distruct Student
+distruct Tdate*/
+
+
+
+// Tdate.h
+
+/*
+#if !defined(AFX_TDATE_H__B2E22E1F_38B3_44F2_AFA3_4670BC104363__INCLUDED_)
+#define AFX_TDATE_H__B2E22E1F_38B3_44F2_AFA3_4670BC104363__INCLUDED_              //多文件用
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+*/
+class Tdate  
+{
+public:
+	Tdate(int,int,int);
+	virtual ~Tdate();
+	void sc();
+protected:
+	int n;
+	int y;
+	int r;
+
+};
+
+//#endif               //多文件用
+
+/////////////////////////////////////////////////////////////////////
+// Student.h
+
+
+/*
+#if !defined(AFX_STUDENT_H__93A8CFFB_643E_45BF_8D07_5E7E58D40331__INCLUDED_)
+#define AFX_STUDENT_H__93A8CFFB_643E_45BF_8D07_5E7E58D40331__INCLUDED_
+#if _MSC_VER > 1000                                                        //多文件用
+#pragma once
+#endif // _MSC_VER > 1000
+
+#include "Tdate.h"
+*/
+
+class Student  
+{
+public:
+	Student(int,int,int,int);
+	virtual ~Student();
+	void Disp();
+protected:
+	int xh;
+	Tdate sr;
+
+
+};
+
+//#endif               //多文件用
+
+/////////////////////////////////////////////////////////////////////
+// Student.cpp
+
+#include<iostream>
+//#include "Student.h"                 //多文件用
+//#include "Tdate.h"                   //多文件用
+using namespace std;   
+
+Student::Student(int xh1,int n1,int y1,int r1):sr(n1,y1,r1)
+{
+	xh=xh1;
+	cout<<"construct Student"<<endl;
+}
+
+Student::~Student()
+{
+	cout<<"distruct Student"<<endl;
+}
+void Student::Disp()
+{
+	cout<<xh<<",";
+	sr.sc();
+}
+
+/////////////////////////////////////////////////////////////////////
+// Tdate.cpp
+
+/*
+#include<iostream>
+#include "Tdate.h"                     //多文件用
+using namespace std;
+*/
+
+Tdate::Tdate(int n2,int y2,int r2)
+{
+	n=n2;
+	y=y2;
+	r=r2;
+
+	cout<<"construct Tdate"<<endl;
+}
+
+Tdate::~Tdate()
+{
+	cout<<"distruct Tdate"<<endl;
+}
+void Tdate::sc()
+{
+	cout<<n<<"/"<<y<<"/"<<r<<endl;
+
+}
+
+/////////////////////////////////////////////////////////////////////
+//zu.cpp
+/*
+#include<iostream>
+#include"Student.h"                   //多文件用
+#include "Tdate.h"
+using namespace std;
+*/
+int main()
+{
+
+      int  n,  y,  m,  d;
+
+      cin>>n>>y>>m>>d;
+
+      Student  s(n, y, m ,d);
+
+      s.Disp();
+
+      return 0;
+
+}
+*******************************************************************************************************************
+/*
+Description
+（1）编写一个学生类，有学号（整数）、分数两个成员，生成对象时可以指定这两个属性的值。生成对象后，可以随时输出这些信息。 
+
+（2）编写一个教师类，成员包括姓名和年龄。生成对象时也可以指定这些属性。另外，也可以随时输出这些属性 
+
+（3）编写一个Pair类，其成员有两个：教师和学生
+
+要求： 
+
+A）每个派对在生成的时候，可以指定老师和学生的属性
+
+B）可以随时输出任何一个派对的属性，包括老师的信息和学生的信息 
+
+（4）每个对象（包括学生和老师）构造或析构时，都要有相应的文字输出，以便验证程序的执行顺序。
+
+
+
+注意：系统内部已经写好了主函数（如下），提交（或Edit）代码时不需要再写（写了就两个主函数了），系统会自动在您提交的代码后面，加上下面的主函数。
+
+int main()
+
+{
+
+int n, s, age;
+
+char name[10];
+
+cin>>name>>age>>n>>s;
+
+Pair p(name, age, n ,s);
+
+p.Disp();   //显示派对的信息
+
+return 0;
+
+}
+
+Input
+输入教师和学生的信息
+
+Output
+输出派对的信息及每个对象构造或析构的信息
+
+Sample Input
+张老师 38
+111111 90
+Sample Output
+Construct a teacher
+Construct a student
+Construct a pair
+张老师 38 111111 90
+Destructing pair...
+Destructing student...
+Destructing teacher...
+*/
+/////////////////////////////////////////////////////////////
+//Teacher.h
+
+
+/*
+#if !defined(AFX_TDATE_H__B2E22E1F_38B3_44F2_AFA3_4670BC104363__INCLUDED_)
+#define AFX_TDATE_H__B2E22E1F_38B3_44F2_AFA3_4670BC104363__INCLUDED_         //多文件用
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+*/
+
+class Teacher  
+{
+public:
+	Teacher(char [10],int);
+	virtual ~Teacher();
+	void sc();
+protected:
+	char m[10];
+	int nl;
+
+};
+
+//#endif                                                                     //多文件用
+
+
+/////////////////////////////////////////////////////////////
+//Student.h
+
+/*
+#if !defined(AFX_STUDENT_H__93A8CFFB_643E_45BF_8D07_5E7E58D40331__INCLUDED_)
+#define AFX_STUDENT_H__93A8CFFB_643E_45BF_8D07_5E7E58D40331__INCLUDED_       //多文件用
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+*/
+
+
+class Student  
+{
+public:
+	Student(int,int);
+	virtual ~Student();
+	void sc();
+protected:
+	int xh;
+	int fs;
+
+
+};
+
+//#endif                                                                  //多文件用
+/////////////////////////////////////////////////////////////
+//Pair.h
+
+/*
+#if !defined(AFX_PAIR_H__364D6925_A44F_4596_9C37_970D61E06AB4__INCLUDED_)
+#define AFX_PAIR_H__364D6925_A44F_4596_9C37_970D61E06AB4__INCLUDED_    //多文件用
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+#include "Student.h"
+#include "Teacher.h"
+*/
+class Pair  
+{
+public:
+	Pair(char [10],int,int,int);
+	virtual ~Pair();
+	void Disp();
+protected:
+	Teacher tc;
+	Student sd;
+
+};
+
+//#endif                                                                   //多文件用
+
+
+
+
+/////////////////////////////////////////////////////////////
+//Student.cpp
+
+
+
+#include<iostream>
+//#include "Student.h"                        //多文件用
+using namespace std;   
+
+
+
+Student::Student(int xh1,int n1)
+{
+	xh=xh1;
+	fs=n1;
+	cout<<"Construct a student"<<endl;
+}
+
+Student::~Student()
+{
+	cout<<"Destructing student..."<<endl;
+}
+void Student::sc()
+{
+	cout<<xh<<" "<<fs<<endl;
+}
+
+
+
+/////////////////////////////////////////////////////////////
+//Teacher.cpp
+
+/*
+#include<iostream>                        //多文件用
+#include "Teacher.h"
+using namespace std;
+*/
+#include<cstring>
+
+Teacher::Teacher(char n[10],int y2)
+{
+	strcpy(m,n);
+	nl=y2;
+	cout<<"Construct a teacher"<<endl;
+}
+
+Teacher::~Teacher()
+{
+	cout<<"Destructing teacher..."<<endl;
+}
+void Teacher::sc()
+{
+	cout<<m<<" "<<nl<<" ";
+}
+
+/////////////////////////////////////////////////////////////
+//Pair.cpp
+/*
+#include<iostream>
+#include "Pair.h"                              
+#include "Student.h"                           
+#include "Teacher.h"                           //多文件用
+using namespace std; 
+*/
+
+Pair::Pair(char name[10],int age,int n,int s):tc(name,age),sd(n,s)
+{
+	cout<<"Construct a pair"<<endl;
+}
+
+Pair::~Pair()
+{
+	cout<<"Destructing pair..."<<endl;
+}
+void Pair::Disp()
+{
+	tc.sc();
+	sd.sc();
+}
+
+
+/////////////////////////////////////////////////////////////
+//zu.cpp
+
+/*
+#include<iostream>
+#include "Pair.h"                //多文件用
+using namespace std;
+*/
+int main()
+
+{
+
+	int n, s, age;
+
+	char name[10];
+
+	cin>>name>>age>>n>>s;
+
+	Pair p(name, age, n ,s);
+
+	p.Disp();   //显示派对的信息
+
+	return 0;
+
+}
